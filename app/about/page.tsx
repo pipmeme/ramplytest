@@ -94,7 +94,7 @@ export default function AboutPage() {
                 established companies ready to optimize and scale their operations.
               </p>
               <div className="text-center">
-                <Link href="/get-started">
+                <Link href="/contact">
                   <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
                     Work With Us
                   </Button>

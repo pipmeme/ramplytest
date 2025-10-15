@@ -2,6 +2,7 @@ import { Header } from "@/components/header"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Zap, TrendingUp, BarChart3, Users, Target, Workflow } from "lucide-react"
+import Link from "next/link"
 
 export default function ServicesPage() {
   const services = [
@@ -83,9 +84,11 @@ export default function ServicesPage() {
             We offer hands-on implementation of automation systems, growth strategies, and data tracking solutions to
             help your business scale efficiently.
           </p>
-          <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
-            Get Started Today
-          </Button>
+          <Link href="/contact">
+            <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
+              Get Started Today
+            </Button>
+          </Link>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">

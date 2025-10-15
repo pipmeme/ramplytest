@@ -46,13 +46,12 @@ export function Header() {
           </Link>
         </nav>
 
-        {/* Desktop Get Started Button */}
-        <Link href="/get-started">
+        <Link href="/contact">
           <Button
             variant="outline"
             className="hidden md:flex border-primary text-primary hover:bg-primary hover:text-primary-foreground bg-transparent font-medium transition-all hover:scale-105 hover:shadow-lg"
           >
-            Get Started
+            Contact Us
           </Button>
         </Link>
 
@@ -91,12 +90,12 @@ export function Header() {
             >
               About
             </Link>
-            <Link href="/get-started" onClick={() => setMobileMenuOpen(false)}>
+            <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>
               <Button
                 variant="outline"
                 className="border-primary text-primary hover:bg-primary hover:text-primary-foreground bg-transparent font-medium w-full mt-4"
               >
-                Get Started
+                Contact Us
               </Button>
             </Link>
           </nav>
