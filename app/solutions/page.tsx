@@ -1,6 +1,14 @@
 import { Header } from "@/components/header"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { CheckCircle2 } from "lucide-react"
+import { Footer } from "@/components/footer"
+import { CookieBanner } from "@/components/cookie-banner"
+
+export const metadata = {
+  title: "Solutions - Ramply Work",
+  description: "Comprehensive automation, strategy, and data tracking solutions to scale your business efficiently.",
+  keywords: ["business automation", "workflow automation", "business strategy", "data analytics", "business growth"],
+}
 
 export default function SolutionsPage() {
   const solutions = [
@@ -72,6 +80,8 @@ export default function SolutionsPage() {
           ))}
         </div>
       </main>
+      <Footer />
+      <CookieBanner />
     </div>
   )
 }

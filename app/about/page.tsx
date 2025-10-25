@@ -3,6 +3,15 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Target, Lightbulb, Rocket } from "lucide-react"
 import Link from "next/link"
+import { Footer } from "@/components/footer"
+import { CookieBanner } from "@/components/cookie-banner"
+
+export const metadata = {
+  title: "About Us - Ramply Work",
+  description:
+    "Founded by Numan Ashraf, Ramply Work helps small businesses grow through automation, strategy, and data-driven insights.",
+  keywords: ["about ramply work", "numan ashraf", "business automation company", "small business growth"],
+}
 
 export default function AboutPage() {
   return (
@@ -104,6 +113,8 @@ export default function AboutPage() {
           </Card>
         </div>
       </main>
+      <Footer />
+      <CookieBanner />
     </div>
   )
 }

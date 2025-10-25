@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useState } from "react"
 import { Mail, Phone, User, Building2, MessageSquare, CheckCircle2 } from "lucide-react"
+import { Footer } from "@/components/footer"
+import { CookieBanner } from "@/components/cookie-banner"
 
 export default function GetStartedPage() {
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -181,6 +183,9 @@ export default function GetStartedPage() {
           </div>
         </div>
       </main>
+
+      <Footer />
+      <CookieBanner />
     </div>
   )
 }

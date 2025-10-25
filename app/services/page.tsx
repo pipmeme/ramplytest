@@ -3,6 +3,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Zap, TrendingUp, BarChart3, Users, Target, Workflow } from "lucide-react"
 import Link from "next/link"
+import { Footer } from "@/components/footer"
+import { CookieBanner } from "@/components/cookie-banner"
+
+export const metadata = {
+  title: "Services - Ramply Work",
+  description:
+    "Workflow automation, customer engagement, growth strategy, analytics, and process optimization services for growing businesses.",
+  keywords: [
+    "workflow automation",
+    "customer engagement",
+    "business analytics",
+    "process optimization",
+    "growth strategy",
+  ],
+}
 
 export default function ServicesPage() {
   const services = [
@@ -120,6 +135,8 @@ export default function ServicesPage() {
           })}
         </div>
       </main>
+      <Footer />
+      <CookieBanner />
     </div>
   )
 }
