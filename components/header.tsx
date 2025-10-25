@@ -27,6 +27,12 @@ export function Header() {
         {/* Desktop Navigation */}
         <nav className="hidden items-center gap-8 md:flex">
           <Link
+            href="/products"
+            className="text-sm font-medium text-muted-foreground transition-all hover:text-primary hover:scale-105"
+          >
+            Products
+          </Link>
+          <Link
             href="/solutions"
             className="text-sm font-medium text-muted-foreground transition-all hover:text-primary hover:scale-105"
           >
@@ -69,6 +75,13 @@ export function Header() {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-border bg-background animate-in slide-in-from-top-5 duration-300">
           <nav className="container mx-auto flex flex-col px-4 py-6 space-y-4">
+            <Link
+              href="/products"
+              className="text-base font-medium text-muted-foreground hover:text-primary transition-colors py-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Products
+            </Link>
             <Link
               href="/solutions"
               className="text-base font-medium text-muted-foreground hover:text-primary transition-colors py-2"

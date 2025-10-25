@@ -12,42 +12,46 @@ export function Footer() {
               Accelerating business growth through smart automation and data-driven insights.
             </p>
             <div className="flex gap-4">
-              <Link
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground transition-colors hover:text-primary"
+              <div
+                className="group relative cursor-not-allowed text-muted-foreground/50 transition-colors"
+                title="Coming Soon"
               >
                 <Facebook className="h-5 w-5" />
-                <span className="sr-only">Facebook</span>
-              </Link>
-              <Link
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground transition-colors hover:text-primary"
+                <span className="sr-only">Facebook - Coming Soon</span>
+                <span className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-foreground px-2 py-1 text-xs text-background opacity-0 transition-opacity group-hover:opacity-100">
+                  Coming Soon
+                </span>
+              </div>
+              <div
+                className="group relative cursor-not-allowed text-muted-foreground/50 transition-colors"
+                title="Coming Soon"
               >
                 <Twitter className="h-5 w-5" />
-                <span className="sr-only">Twitter</span>
-              </Link>
-              <Link
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground transition-colors hover:text-primary"
+                <span className="sr-only">Twitter - Coming Soon</span>
+                <span className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-foreground px-2 py-1 text-xs text-background opacity-0 transition-opacity group-hover:opacity-100">
+                  Coming Soon
+                </span>
+              </div>
+              <div
+                className="group relative cursor-not-allowed text-muted-foreground/50 transition-colors"
+                title="Coming Soon"
               >
                 <Linkedin className="h-5 w-5" />
-                <span className="sr-only">LinkedIn</span>
-              </Link>
-              <Link
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground transition-colors hover:text-primary"
+                <span className="sr-only">LinkedIn - Coming Soon</span>
+                <span className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-foreground px-2 py-1 text-xs text-background opacity-0 transition-opacity group-hover:opacity-100">
+                  Coming Soon
+                </span>
+              </div>
+              <div
+                className="group relative cursor-not-allowed text-muted-foreground/50 transition-colors"
+                title="Coming Soon"
               >
                 <Instagram className="h-5 w-5" />
-                <span className="sr-only">Instagram</span>
-              </Link>
+                <span className="sr-only">Instagram - Coming Soon</span>
+                <span className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-foreground px-2 py-1 text-xs text-background opacity-0 transition-opacity group-hover:opacity-100">
+                  Coming Soon
+                </span>
+              </div>
             </div>
           </div>
 
