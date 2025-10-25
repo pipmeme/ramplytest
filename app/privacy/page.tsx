@@ -15,7 +15,7 @@ export default function PrivacyPage() {
           <h1 className="mb-8 text-4xl font-bold text-foreground md:text-5xl">Privacy Policy</h1>
           <div className="prose prose-gray max-w-none space-y-6 text-muted-foreground">
             <p className="text-lg">
-              <strong>Last updated:</strong> {new Date().toLocaleDateString()}
+              <strong>Last updated:</strong> 27/08/2025
             </p>
 
             <section>
@@ -87,7 +87,7 @@ export default function PrivacyPage() {
               <p>
                 If you have questions about this Privacy Policy, please contact us at{" "}
                 <a href="mailto:hello@ramplywork.com" className="text-primary hover:underline">
-                  hello@ramplywork.com
+                  hello@ramplywork.com / ramplywork@gmail.com  
                 </a>
               </p>
             </section>
