@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: "Ramply Work - Accelerating Business Growth",
   description:
     "We set up workflows and dashboards to accelerate your business growth through automation, strategy, and data tracking.",
-  generator: "v0.app",
+    generator: 'v0.app'
 }
 
 export default function RootLayout({
