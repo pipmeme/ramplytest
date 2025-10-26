@@ -54,35 +54,37 @@ export default function GetStartedPage() {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="container mx-auto px-4 py-12 md:py-20 lg:px-8">
+      <main className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 md:py-16 lg:py-20 lg:px-8">
         <div className="mx-auto max-w-3xl">
           {/* Header Section */}
-          <div className="text-center mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4 text-balance">
+          <div className="text-center mb-8 sm:mb-10 md:mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-3 sm:mb-4 text-balance px-2">
               Let's Accelerate Your <span className="text-primary">Business Growth</span>
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground text-pretty">
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground text-pretty px-2">
               Fill out the form below and we'll get back to you within 24 hours to discuss how we can help scale your
               business.
             </p>
           </div>
 
           {/* Contact Form */}
-          <div className="bg-card border border-border rounded-2xl p-6 md:p-10 shadow-lg animate-in fade-in slide-in-from-bottom-6 duration-700 delay-150">
+          <div className="bg-card border border-border rounded-2xl p-5 sm:p-6 md:p-8 lg:p-10 shadow-lg animate-in fade-in slide-in-from-bottom-6 duration-700 delay-150">
             {isSubmitted ? (
               <div className="text-center py-12 animate-in fade-in zoom-in-95 duration-500">
-                <CheckCircle2 className="h-16 w-16 text-primary mx-auto mb-4" />
-                <h2 className="text-2xl font-bold text-foreground mb-2">Thank You!</h2>
-                <p className="text-muted-foreground">We've received your message and will get back to you soon.</p>
+                <CheckCircle2 className="h-14 w-14 sm:h-16 sm:w-16 text-primary mx-auto mb-4" />
+                <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2">Thank You!</h2>
+                <p className="text-sm sm:text-base text-muted-foreground px-4">
+                  We've received your message and will get back to you soon.
+                </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
                 <input type="hidden" name="access_key" value="7b634759-7ef8-4c15-a512-b0e7945c56ee" />
 
                 {/* Name Field */}
                 <div className="space-y-2 animate-in fade-in slide-in-from-left-4 duration-500 delay-200">
                   <label htmlFor="name" className="text-sm font-medium text-foreground flex items-center gap-2">
-                    <User className="h-4 w-4 text-primary" />
+                    <User className="h-4 w-4 text-primary flex-shrink-0" />
                     Full Name *
                   </label>
                   <Input
@@ -91,14 +93,14 @@ export default function GetStartedPage() {
                     type="text"
                     required
                     placeholder="John Doe"
-                    className="transition-all focus:scale-[1.01]"
+                    className="transition-all focus:scale-[1.01] h-12 text-base touch-manipulation"
                   />
                 </div>
 
                 {/* Email Field */}
                 <div className="space-y-2 animate-in fade-in slide-in-from-left-4 duration-500 delay-300">
                   <label htmlFor="email" className="text-sm font-medium text-foreground flex items-center gap-2">
-                    <Mail className="h-4 w-4 text-primary" />
+                    <Mail className="h-4 w-4 text-primary flex-shrink-0" />
                     Email Address *
                   </label>
                   <Input
@@ -107,14 +109,14 @@ export default function GetStartedPage() {
                     type="email"
                     required
                     placeholder="john@example.com"
-                    className="transition-all focus:scale-[1.01]"
+                    className="transition-all focus:scale-[1.01] h-12 text-base touch-manipulation"
                   />
                 </div>
 
                 {/* Phone Field */}
                 <div className="space-y-2 animate-in fade-in slide-in-from-left-4 duration-500 delay-400">
                   <label htmlFor="phone" className="text-sm font-medium text-foreground flex items-center gap-2">
-                    <Phone className="h-4 w-4 text-primary" />
+                    <Phone className="h-4 w-4 text-primary flex-shrink-0" />
                     Phone Number
                   </label>
                   <Input
@@ -122,14 +124,14 @@ export default function GetStartedPage() {
                     name="phone"
                     type="tel"
                     placeholder="+1 (555) 000-0000"
-                    className="transition-all focus:scale-[1.01]"
+                    className="transition-all focus:scale-[1.01] h-12 text-base touch-manipulation"
                   />
                 </div>
 
                 {/* Business Name Field */}
                 <div className="space-y-2 animate-in fade-in slide-in-from-left-4 duration-500 delay-500">
                   <label htmlFor="businessName" className="text-sm font-medium text-foreground flex items-center gap-2">
-                    <Building2 className="h-4 w-4 text-primary" />
+                    <Building2 className="h-4 w-4 text-primary flex-shrink-0" />
                     Business Name
                   </label>
                   <Input
@@ -137,14 +139,14 @@ export default function GetStartedPage() {
                     name="businessName"
                     type="text"
                     placeholder="Your Company Name"
-                    className="transition-all focus:scale-[1.01]"
+                    className="transition-all focus:scale-[1.01] h-12 text-base touch-manipulation"
                   />
                 </div>
 
                 {/* Message Field */}
                 <div className="space-y-2 animate-in fade-in slide-in-from-left-4 duration-500 delay-600">
                   <label htmlFor="message" className="text-sm font-medium text-foreground flex items-center gap-2">
-                    <MessageSquare className="h-4 w-4 text-primary" />
+                    <MessageSquare className="h-4 w-4 text-primary flex-shrink-0" />
                     Tell Us About Your Business *
                   </label>
                   <Textarea
@@ -153,7 +155,7 @@ export default function GetStartedPage() {
                     required
                     placeholder="What challenges are you facing? What are your growth goals?"
                     rows={5}
-                    className="transition-all focus:scale-[1.01] resize-none"
+                    className="transition-all focus:scale-[1.01] resize-none text-base touch-manipulation min-h-[120px]"
                   />
                 </div>
 
@@ -161,7 +163,8 @@ export default function GetStartedPage() {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-medium text-base py-6 transition-all hover:scale-[1.02] hover:shadow-xl animate-in fade-in slide-in-from-bottom-4 duration-500 delay-700"
+                  size="lg"
+                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-medium text-base sm:text-lg py-6 sm:py-7 transition-all hover:scale-[1.02] hover:shadow-xl animate-in fade-in slide-in-from-bottom-4 duration-500 delay-700 touch-manipulation"
                 >
                   {isSubmitting ? "Sending..." : "Send Message"}
                 </Button>
@@ -170,12 +173,12 @@ export default function GetStartedPage() {
           </div>
 
           {/* Contact Info */}
-          <div className="mt-12 text-center animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
-            <p className="text-muted-foreground">
+          <div className="mt-8 sm:mt-10 md:mt-12 text-center animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 px-4">
+            <p className="text-sm sm:text-base text-muted-foreground">
               Prefer to email directly?{" "}
               <a
                 href="mailto:Ramplywork@gmail.com"
-                className="text-primary hover:underline font-medium transition-colors"
+                className="text-primary hover:underline font-medium transition-colors break-all"
               >
                 Ramplywork@gmail.com
               </a>

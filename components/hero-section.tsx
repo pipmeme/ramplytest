@@ -1,20 +1,24 @@
 export function HeroSection() {
   return (
-    <section className="container mx-auto px-4 py-12 md:py-16 lg:py-24">
-      <div className="grid items-center gap-8 md:gap-12 lg:grid-cols-2">
-        <div className="space-y-4 md:space-y-6 animate-in fade-in slide-in-from-left-8 duration-700">
-          <h1 className="text-3xl font-bold leading-tight text-foreground sm:text-4xl md:text-5xl lg:text-6xl text-balance">
+    <section className="container mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20 lg:py-24">
+      <div className="grid items-center gap-8 sm:gap-10 md:gap-12 lg:grid-cols-2">
+        <div className="space-y-4 sm:space-y-5 md:space-y-6 animate-in fade-in slide-in-from-left-8 duration-700">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground text-balance">
             SYSTEMS FOR SCALABILITY.
             <br />
             WORK SMARTER.
           </h1>
-          <p className="text-base text-muted-foreground md:text-lg lg:text-xl text-pretty">
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground text-pretty leading-relaxed">
             We set up workflows and dashboards to accelerate your business growth
           </p>
         </div>
 
         <div className="relative flex items-center justify-center animate-in fade-in slide-in-from-right-8 duration-700 delay-200">
-          <svg viewBox="0 0 400 300" className="h-auto w-full max-w-sm md:max-w-md" xmlns="http://www.w3.org/2000/svg">
+          <svg
+            viewBox="0 0 400 300"
+            className="h-auto w-full max-w-xs sm:max-w-sm md:max-w-md"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             {/* Background decorative elements */}
             <circle cx="80" cy="50" r="8" fill="#D1F0E8" opacity="0.5" />
             <circle cx="320" cy="80" r="6" fill="#D1F0E8" opacity="0.5" />
