@@ -9,8 +9,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { Download, ArrowLeft, Upload, X } from "lucide-react"
+import { Download, ArrowLeft, Upload, X, Share2 } from "lucide-react"
 import Link from "next/link"
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 
 export default function QRGeneratorPage() {
   const [qrType, setQrType] = useState("url")
@@ -21,6 +23,9 @@ export default function QRGeneratorPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [QRCodeStyling, setQRCodeStyling] = useState<any>(null)
   const qrCodeRef = useRef<any>(null)
+  const [isMobile, setIsMobile] = useState(false)
+  const [showImageModal, setShowImageModal] = useState(false)
+  const [qrImageUrl, setQrImageUrl] = useState<string>("")
 
   const [urlData, setUrlData] = useState("")
   const [wifiSSID, setWifiSSID] = useState("")
@@ -46,7 +51,13 @@ export default function QRGeneratorPage() {
   const [upiNote, setUpiNote] = useState("")
   const [plainText, setPlainText] = useState("")
 
-  // Load QR code library only on client side
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent))
+    }
+    checkMobile()
+  }, [])
+
   useEffect(() => {
     import("qr-code-styling").then((module) => {
       setQRCodeStyling(() => module.default)
@@ -97,7 +108,6 @@ export default function QRGeneratorPage() {
     setLogoFile(null)
   }
 
-  // Generate QR code
   useEffect(() => {
     if (!QRCodeStyling || !canvasRef.current || !qrData) return
 
@@ -143,9 +153,49 @@ export default function QRGeneratorPage() {
     }
   }, [QRCodeStyling, qrData, qrColor, qrBgColor, qrSize, logoFile])
 
-  const handleDownload = (format: "png" | "svg") => {
-    if (qrCodeRef.current) {
+  const handleDownload = async (format: "png" | "svg") => {
+    if (!qrCodeRef.current) return
+
+    try {
+      if (isMobile) {
+        const blob = await new Promise<Blob>((resolve) => {
+          qrCodeRef.current.getRawData(format).then((blob: Blob) => resolve(blob))
+        })
+        const url = URL.createObjectURL(blob)
+        setQrImageUrl(url)
+        setShowImageModal(true)
+      } else {
+        qrCodeRef.current.download({ name: "qr-code", extension: format })
+      }
+    } catch (error) {
+      console.error("Download error:", error)
       qrCodeRef.current.download({ name: "qr-code", extension: format })
+    }
+  }
+
+  const handleShare = async () => {
+    if (!qrCodeRef.current) return
+
+    try {
+      const blob = await new Promise<Blob>((resolve) => {
+        qrCodeRef.current.getRawData("png").then((blob: Blob) => resolve(blob))
+      })
+
+      const file = new File([blob], "qr-code.png", { type: "image/png" })
+
+      if (navigator.share && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: "QR Code",
+          text: "Check out this QR code",
+        })
+      } else {
+        const url = URL.createObjectURL(blob)
+        setQrImageUrl(url)
+        setShowImageModal(true)
+      }
+    } catch (error) {
+      console.error("Share error:", error)
     }
   }
 
@@ -408,6 +458,7 @@ export default function QRGeneratorPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Header />
       <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <Link href="/tools">
           <Button variant="ghost" className="mb-6">
@@ -424,14 +475,12 @@ export default function QRGeneratorPage() {
         </div>
 
         <div className="grid gap-8 lg:grid-cols-2">
-          {/* Input Section */}
           <Card>
             <CardHeader>
               <CardTitle>QR Code Settings</CardTitle>
               <CardDescription>Customize your QR code with advanced options</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              {/* QR Type */}
               <div className="space-y-2">
                 <Label htmlFor="qr-type">QR Code Type</Label>
                 <Select value={qrType} onValueChange={setQrType}>
@@ -453,10 +502,8 @@ export default function QRGeneratorPage() {
                 </Select>
               </div>
 
-              {/* Dynamic Input Fields */}
               {renderInputFields()}
 
-              {/* Logo Upload */}
               <div className="space-y-2">
                 <Label htmlFor="logo">Logo (Optional)</Label>
                 {logoFile ? (
@@ -478,7 +525,6 @@ export default function QRGeneratorPage() {
                 )}
               </div>
 
-              {/* Colors */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="qr-color">QR Color</Label>
@@ -508,7 +554,6 @@ export default function QRGeneratorPage() {
                 </div>
               </div>
 
-              {/* Size */}
               <div className="space-y-2">
                 <Label htmlFor="qr-size">Size (px)</Label>
                 <Select value={qrSize} onValueChange={setQrSize}>
@@ -527,7 +572,6 @@ export default function QRGeneratorPage() {
             </CardContent>
           </Card>
 
-          {/* Preview Section */}
           <Card>
             <CardHeader>
               <CardTitle>Preview & Download</CardTitle>
@@ -543,21 +587,89 @@ export default function QRGeneratorPage() {
               </div>
 
               {qrData && (
-                <div className="flex gap-4">
-                  <Button onClick={() => handleDownload("png")} className="flex-1">
-                    <Download className="mr-2 h-4 w-4" />
-                    Download PNG
-                  </Button>
-                  <Button onClick={() => handleDownload("svg")} variant="outline" className="flex-1">
-                    <Download className="mr-2 h-4 w-4" />
-                    Download SVG
-                  </Button>
-                </div>
+                <>
+                  <div className="space-y-3">
+                    <div className="flex gap-4">
+                      <Button onClick={() => handleDownload("png")} className="flex-1">
+                        <Download className="mr-2 h-4 w-4" />
+                        {isMobile ? "Save" : "Download"} PNG
+                      </Button>
+                      <Button onClick={() => handleDownload("svg")} variant="outline" className="flex-1">
+                        <Download className="mr-2 h-4 w-4" />
+                        {isMobile ? "Save" : "Download"} SVG
+                      </Button>
+                    </div>
+
+                    {isMobile && (
+                      <Button onClick={handleShare} variant="secondary" className="w-full">
+                        <Share2 className="mr-2 h-4 w-4" />
+                        Share QR Code
+                      </Button>
+                    )}
+
+                    {isMobile && (
+                      <p className="text-xs text-center text-muted-foreground">
+                        Tap "Save" to view image, then long-press to save to your device
+                      </p>
+                    )}
+                  </div>
+                </>
               )}
             </CardContent>
           </Card>
         </div>
       </div>
+      <Footer />
+
+      {showImageModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+          onClick={() => setShowImageModal(false)}
+        >
+          <div className="relative max-w-lg w-full bg-background rounded-lg p-6">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="absolute right-2 top-2"
+              onClick={() => setShowImageModal(false)}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+            <div className="space-y-4">
+              <div className="text-center">
+                <h3 className="text-lg font-semibold mb-2">Your QR Code</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Long-press the image below to save it to your device
+                </p>
+              </div>
+              <div className="flex justify-center">
+                <img
+                  src={qrImageUrl || "/placeholder.svg"}
+                  alt="QR Code"
+                  className="max-w-full h-auto rounded-lg border-2 border-border"
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => {
+                    const a = document.createElement("a")
+                    a.href = qrImageUrl
+                    a.download = "qr-code.png"
+                    a.click()
+                  }}
+                  className="flex-1"
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  Download
+                </Button>
+                <Button onClick={() => setShowImageModal(false)} variant="outline" className="flex-1">
+                  Close
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

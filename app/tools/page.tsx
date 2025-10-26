@@ -3,6 +3,8 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Calculator, ClipboardCheck, FileText, TrendingUp, ArrowRight, QrCode } from "lucide-react"
+import { Header } from "@/components/header"
+import { CookieBanner } from "@/components/cookie-banner"
 import { Footer } from "@/components/footer"
 
 export const metadata: Metadata = {
@@ -75,22 +77,25 @@ const tools = [
 export default function ToolsPage() {
   return (
     <div className="flex min-h-screen flex-col">
+      <Header />
       <main className="flex-1">
-        {/* Hero Section */}
         <section className="border-b border-border bg-gradient-to-b from-background to-muted/20 py-16 md:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-3xl text-center">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+                <span className="text-lg">🎁</span>
+                100% Free Forever • No Ads
+              </div>
               <h1 className="mb-6 text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl">
                 Free Business Tools
               </h1>
               <p className="mb-8 text-lg text-muted-foreground sm:text-xl md:text-2xl">
-                Powerful tools to help you understand, grow, and manage your business - completely free.
+                Premium tools worth $50+/month - completely free. No credit card, no hidden fees, no ads.
               </p>
             </div>
           </div>
         </section>
 
-        {/* Tools Grid */}
         <section className="py-16 md:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -101,6 +106,9 @@ export default function ToolsPage() {
                     key={tool.title}
                     className="group relative overflow-hidden border-2 transition-all hover:border-primary hover:shadow-xl"
                   >
+                    <div className="absolute right-4 top-4 rounded-full bg-green-500 px-3 py-1 text-xs font-bold text-white shadow-lg">
+                      FREE
+                    </div>
                     <CardHeader>
                       <div className={`mb-4 inline-flex rounded-lg ${tool.bgColor} p-3`}>
                         <Icon className={`h-8 w-8 ${tool.color}`} />
@@ -131,7 +139,6 @@ export default function ToolsPage() {
           </div>
         </section>
 
-        {/* CTA Section */}
         <section className="border-t border-border bg-muted/30 py-16 md:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-3xl text-center">
@@ -150,6 +157,7 @@ export default function ToolsPage() {
         </section>
       </main>
       <Footer />
+      <CookieBanner />
     </div>
   )
 }

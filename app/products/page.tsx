@@ -3,7 +3,9 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Database, BarChart3, Megaphone, CheckCircle2, ArrowRight } from "lucide-react"
 import Link from "next/link"
+import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { CookieBanner } from "@/components/cookie-banner"
 
 export const metadata: Metadata = {
   title: "Ramply Connect - Customer Intelligence Ecosystem | Ramply Work",
@@ -68,6 +70,7 @@ export default function ProductsPage() {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <Header />
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-gradient-to-b from-background to-muted/20 py-20 md:py-32">
@@ -173,6 +176,7 @@ export default function ProductsPage() {
       </main>
 
       <Footer />
+      <CookieBanner />
     </div>
   )
 }

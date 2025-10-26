@@ -19,6 +19,7 @@ import {
   Zap,
   Download,
 } from "lucide-react"
+import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import jsPDF from "jspdf"
 
@@ -444,6 +445,7 @@ Follow up within 24 hours for best conversion.`,
   if (showResults) {
     return (
       <>
+        <Header />
         <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 py-12 px-4">
           <div className="container mx-auto max-w-4xl">
             {/* Score Display */}
@@ -599,6 +601,7 @@ Follow up within 24 hours for best conversion.`,
 
   return (
     <>
+      <Header />
       <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 py-12 px-4">
         <div className="container mx-auto max-w-3xl">
           {step === 0 ? (

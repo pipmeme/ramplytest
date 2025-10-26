@@ -313,7 +313,7 @@ export default function GrowthCalculator() {
 
         setTimeout(() => {
           alert(
-            "Your report is ready! If download didn't start, please check your browser's download folder or allow pop-ups.",
+            "Your report is ready! Check your Downloads folder or browser downloads. If you don't see it, please allow downloads in your browser settings.",
           )
         }, 500)
       } else {

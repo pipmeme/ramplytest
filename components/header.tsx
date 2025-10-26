@@ -54,7 +54,7 @@ export function Header() {
             href="/tools"
             className="text-sm font-semibold text-primary transition-all hover:text-primary/80 hover:scale-105 font-medium"
           >
-            Free Tools
+            Business Tools
           </Link>
           <Link
             href="/about"
@@ -119,7 +119,7 @@ export function Header() {
               className="text-base font-semibold text-primary hover:text-primary/80 transition-colors py-3 px-2 rounded-lg hover:bg-primary/10 touch-manipulation"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Free Tools
+              Business Tools
             </Link>
             <Link
               href="/about"
