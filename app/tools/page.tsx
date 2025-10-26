@@ -51,14 +51,14 @@ const tools = [
     features: ["Break-even analysis", "Profit projections", "Interactive scenarios"],
   },
   {
-    title: "Profit Margin Calculator",
+    title: "QR Code Generator",
     description:
-      "Calculate profit margins, markup, and optimal pricing for your products. Compare multiple items, get pricing recommendations, and maximize profitability.",
-    icon: Calculator,
-    href: "/tools/profit-margin",
-    color: "text-emerald-500",
-    bgColor: "bg-emerald-500/10",
-    features: ["Multi-product analysis", "Pricing optimization", "Industry benchmarks"],
+      "Create custom QR codes with advanced features. Multiple types, full customization, add logos, and high-resolution downloads - premium features worth $12/month.",
+    icon: QrCode,
+    href: "/tools/qr-generator",
+    color: "text-cyan-500",
+    bgColor: "bg-cyan-500/10",
+    features: ["10+ QR code types", "Custom colors & logos", "High-res PNG & SVG"],
   },
   {
     title: "Invoice Generator",
@@ -69,16 +69,6 @@ const tools = [
     color: "text-purple-500",
     bgColor: "bg-purple-500/10",
     features: ["Professional templates", "Auto calculations", "Instant PDF download"],
-  },
-  {
-    title: "QR Code Generator",
-    description:
-      "Create custom QR codes for your business. Multiple types, full customization, add logos, and download in high resolution - premium features, free forever.",
-    icon: QrCode,
-    href: "/tools/qr-generator",
-    color: "text-pink-500",
-    bgColor: "bg-pink-500/10",
-    features: ["10+ QR types", "Custom colors & logos", "High-res downloads"],
   },
 ]
 
