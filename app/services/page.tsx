@@ -1,7 +1,7 @@
 import { Header } from "@/components/header"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Zap, TrendingUp, BarChart3, Users, Target, Workflow } from "lucide-react"
+import { Zap, TrendingUp, BarChart3, Users, Target, Workflow, ClipboardCheck } from "lucide-react"
 import Link from "next/link"
 import { Footer } from "@/components/footer"
 import { CookieBanner } from "@/components/cookie-banner"
@@ -21,6 +21,20 @@ export const metadata = {
 
 export default function ServicesPage() {
   const services = [
+    {
+      icon: ClipboardCheck,
+      title: "Business Health Score",
+      description:
+        "Get a free comprehensive assessment of your business performance and receive personalized recommendations.",
+      details: [
+        "8 key business metrics analysis",
+        "Instant performance scoring",
+        "Personalized improvement recommendations",
+        "Identify growth opportunities",
+      ],
+      featured: true,
+      link: "/health-score",
+    },
     {
       icon: Zap,
       title: "Workflow Automation",
@@ -110,18 +124,32 @@ export default function ServicesPage() {
           {services.map((service, index) => {
             const Icon = service.icon
             return (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
+              <Card
+                key={index}
+                className={`hover:shadow-lg transition-shadow ${
+                  service.featured ? "border-2 border-primary bg-gradient-to-br from-background to-primary/5" : ""
+                }`}
+              >
                 <CardHeader>
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                      <Icon className="h-5 w-5 text-primary" />
+                    <div
+                      className={`flex h-10 w-10 items-center justify-center rounded-lg ${
+                        service.featured ? "bg-primary text-primary-foreground" : "bg-primary/10"
+                      }`}
+                    >
+                      <Icon className={`h-5 w-5 ${service.featured ? "text-primary-foreground" : "text-primary"}`} />
                     </div>
+                    {service.featured && (
+                      <span className="px-2 py-1 text-xs font-semibold bg-primary text-primary-foreground rounded-full">
+                        FREE
+                      </span>
+                    )}
                   </div>
                   <CardTitle className="text-xl">{service.title}</CardTitle>
                   <CardDescription>{service.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2">
+                  <ul className="space-y-2 mb-4">
                     {service.details.map((detail, detailIndex) => (
                       <li key={detailIndex} className="text-sm text-muted-foreground flex items-start gap-2">
                         <span className="text-primary mt-1">•</span>
@@ -129,6 +157,13 @@ export default function ServicesPage() {
                       </li>
                     ))}
                   </ul>
+                  {service.featured && (
+                    <Link href={service.link}>
+                      <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
+                        Get Your Free Score
+                      </Button>
+                    </Link>
+                  )}
                 </CardContent>
               </Card>
             )

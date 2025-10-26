@@ -27,6 +27,12 @@ export function Header() {
         {/* Desktop Navigation */}
         <nav className="hidden items-center gap-6 lg:gap-8 md:flex">
           <Link
+            href="/health-score"
+            className="text-sm font-semibold text-primary transition-all hover:text-primary/80 hover:scale-105 flex items-center gap-1"
+          >
+            Free Health Score
+          </Link>
+          <Link
             href="/products"
             className="text-sm font-medium text-muted-foreground transition-all hover:text-primary hover:scale-105"
           >
@@ -45,16 +51,10 @@ export function Header() {
             Services
           </Link>
           <Link
-            href="/growth-calculator"
-            className="text-sm font-medium text-primary transition-all hover:text-primary/80 hover:scale-105 font-semibold"
+            href="/tools"
+            className="text-sm font-semibold text-primary transition-all hover:text-primary/80 hover:scale-105 font-medium"
           >
-            Growth Calculator
-          </Link>
-          <Link
-            href="/health-score"
-            className="text-sm font-medium text-muted-foreground transition-all hover:text-primary hover:scale-105"
-          >
-            Free Assessment
+            Free Tools
           </Link>
           <Link
             href="/about"
@@ -87,6 +87,13 @@ export function Header() {
         <div className="md:hidden border-t border-border bg-background animate-in slide-in-from-top-5 duration-300">
           <nav className="container mx-auto flex flex-col px-4 py-4 space-y-1">
             <Link
+              href="/health-score"
+              className="text-base font-semibold text-primary hover:text-primary/80 transition-colors py-3 px-2 rounded-lg hover:bg-primary/10 touch-manipulation"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Free Health Score
+            </Link>
+            <Link
               href="/products"
               className="text-base font-medium text-muted-foreground hover:text-primary transition-colors py-3 px-2 rounded-lg hover:bg-muted/50 touch-manipulation"
               onClick={() => setMobileMenuOpen(false)}
@@ -108,18 +115,11 @@ export function Header() {
               Services
             </Link>
             <Link
-              href="/growth-calculator"
+              href="/tools"
               className="text-base font-semibold text-primary hover:text-primary/80 transition-colors py-3 px-2 rounded-lg hover:bg-primary/10 touch-manipulation"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Growth Calculator 📊
-            </Link>
-            <Link
-              href="/health-score"
-              className="text-base font-medium text-muted-foreground hover:text-primary transition-colors py-3 px-2 rounded-lg hover:bg-muted/50 touch-manipulation"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Free Assessment
+              Free Tools
             </Link>
             <Link
               href="/about"

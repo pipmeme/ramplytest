@@ -6,12 +6,18 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { ArrowRight, TrendingUp, DollarSign, Users, Target, Download, Info } from "lucide-react"
+import { ArrowRight, TrendingUp, DollarSign, Users, Target, Download, Info, Mail } from "lucide-react"
 import { jsPDF } from "jspdf"
 
 export default function GrowthCalculator() {
   const [step, setStep] = useState(1)
+  const [showEmailCapture, setShowEmailCapture] = useState(false)
   const [showResults, setShowResults] = useState(false)
+  const [isDownloading, setIsDownloading] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const [userEmail, setUserEmail] = useState("")
+  const [businessName, setBusinessName] = useState("")
 
   // Input values
   const [avgPurchase, setAvgPurchase] = useState(50)
@@ -89,140 +95,238 @@ export default function GrowthCalculator() {
   }
 
   const handleCalculate = () => {
-    setShowResults(true)
-    // Initialize simulator with current values
-    setSimRetentionRate(retentionRate)
-    setSimLifespan(customerLifespan)
-    setSimMonthlyCustomers(monthlyCustomers)
+    setShowEmailCapture(true)
   }
 
-  const handleDownloadReport = () => {
-    const pdf = new jsPDF()
-    const pageWidth = pdf.internal.pageSize.getWidth()
-    const margin = 20
+  const handleSubmitAndShowResults = async () => {
+    if (!userEmail || !businessName) {
+      alert("Please enter your email and business name to see results")
+      return
+    }
 
-    // Header
-    pdf.setFillColor(20, 184, 166)
-    pdf.rect(0, 0, pageWidth, 40, "F")
-    pdf.setTextColor(255, 255, 255)
-    pdf.setFontSize(24)
-    pdf.setFont("helvetica", "bold")
-    pdf.text("Business Growth Calculator Report", margin, 25)
+    setIsSubmitting(true)
 
-    // Company info
-    pdf.setFontSize(10)
-    pdf.setFont("helvetica", "normal")
-    pdf.text("Powered by Ramply Work", margin, 35)
+    try {
+      const formData = {
+        access_key: "7b634759-7ef8-4c15-a512-b0e7945c56ee",
+        subject: "New Growth Calculator Submission",
+        from_name: "Growth Calculator - Ramply Work",
+        email: userEmail,
+        business_name: businessName,
 
-    // Reset text color
-    pdf.setTextColor(0, 0, 0)
-    let yPos = 55
+        // Input values
+        average_purchase: `$${avgPurchase}`,
+        purchases_per_year: purchasesPerYear,
+        customer_lifespan: `${customerLifespan} years`,
+        monthly_customers: monthlyCustomers,
+        retention_rate: `${retentionRate}%`,
+        acquisition_cost: `$${acquisitionCost}`,
+        profit_margin: `${profitMargin}%`,
 
-    // Current Metrics Section
-    pdf.setFontSize(16)
-    pdf.setFont("helvetica", "bold")
-    pdf.setTextColor(20, 184, 166)
-    pdf.text("Your Current Business Metrics", margin, yPos)
-    yPos += 10
+        // Calculated metrics
+        customer_lifetime_value: formatCurrency(clv),
+        annual_revenue: formatCurrency(annualRevenue),
+        lost_revenue: formatCurrency(lostRevenue),
+        roi: `${roi.toFixed(1)}%`,
 
-    pdf.setFontSize(11)
-    pdf.setFont("helvetica", "normal")
-    pdf.setTextColor(0, 0, 0)
+        // Additional info
+        submission_date: new Date().toLocaleString(),
+        tool: "Growth Calculator",
+      }
 
-    const metrics = [
-      { label: "Customer Lifetime Value", value: formatCurrency(clv) },
-      { label: "Annual Revenue", value: formatCurrency(annualRevenue) },
-      { label: "Customer Retention Rate", value: `${retentionRate}%` },
-      { label: "Monthly New Customers", value: monthlyCustomers.toString() },
-      { label: "Average Purchase Amount", value: formatCurrency(avgPurchase) },
-      { label: "Purchases Per Year", value: purchasesPerYear.toString() },
-      { label: "Customer Lifespan", value: `${customerLifespan} years` },
-      { label: "ROI", value: `${roi.toFixed(1)}%` },
-    ]
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
 
-    metrics.forEach((metric) => {
+      if (response.ok) {
+        setShowEmailCapture(false)
+        setShowResults(true)
+        // Initialize simulator with current values
+        setSimRetentionRate(retentionRate)
+        setSimLifespan(customerLifespan)
+        setSimMonthlyCustomers(monthlyCustomers)
+      } else {
+        throw new Error("Submission failed")
+      }
+    } catch (error) {
+      console.error("[v0] Form submission error:", error)
+      alert("There was an error. Please try again or contact us at ramplywork@gmail.com")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleDownloadReport = async () => {
+    try {
+      setIsDownloading(true)
+
+      const pdf = new jsPDF()
+      const pageWidth = pdf.internal.pageSize.getWidth()
+      const margin = 20
+
+      // Header
+      pdf.setFillColor(20, 184, 166)
+      pdf.rect(0, 0, pageWidth, 40, "F")
+      pdf.setTextColor(255, 255, 255)
+      pdf.setFontSize(24)
       pdf.setFont("helvetica", "bold")
-      pdf.text(`${metric.label}:`, margin, yPos)
+      pdf.text("Business Growth Calculator Report", margin, 25)
+
+      // Company info
+      pdf.setFontSize(10)
       pdf.setFont("helvetica", "normal")
-      pdf.text(metric.value, margin + 80, yPos)
+      pdf.text("Powered by Ramply Work", margin, 35)
+
+      // Reset text color
+      pdf.setTextColor(0, 0, 0)
+      let yPos = 55
+
+      if (businessName) {
+        pdf.setFontSize(14)
+        pdf.setFont("helvetica", "bold")
+        pdf.text(`Business: ${businessName}`, margin, yPos)
+        yPos += 10
+      }
+
+      // Current Metrics Section
+      pdf.setFontSize(16)
+      pdf.setFont("helvetica", "bold")
+      pdf.setTextColor(20, 184, 166)
+      pdf.text("Your Current Business Metrics", margin, yPos)
+      yPos += 10
+
+      pdf.setFontSize(11)
+      pdf.setFont("helvetica", "normal")
+      pdf.setTextColor(0, 0, 0)
+
+      const metrics = [
+        { label: "Customer Lifetime Value", value: formatCurrency(clv) },
+        { label: "Annual Revenue", value: formatCurrency(annualRevenue) },
+        { label: "Customer Retention Rate", value: `${retentionRate}%` },
+        { label: "Monthly New Customers", value: monthlyCustomers.toString() },
+        { label: "Average Purchase Amount", value: formatCurrency(avgPurchase) },
+        { label: "Purchases Per Year", value: purchasesPerYear.toString() },
+        { label: "Customer Lifespan", value: `${customerLifespan} years` },
+        { label: "ROI", value: `${roi.toFixed(1)}%` },
+      ]
+
+      metrics.forEach((metric) => {
+        pdf.setFont("helvetica", "bold")
+        pdf.text(`${metric.label}:`, margin, yPos)
+        pdf.setFont("helvetica", "normal")
+        pdf.text(metric.value, margin + 80, yPos)
+        yPos += 7
+      })
+
+      yPos += 10
+
+      // Lost Revenue Section
+      pdf.setFontSize(16)
+      pdf.setFont("helvetica", "bold")
+      pdf.setTextColor(239, 68, 68)
+      pdf.text("Revenue at Risk", margin, yPos)
+      yPos += 10
+
+      pdf.setFontSize(11)
+      pdf.setFont("helvetica", "normal")
+      pdf.setTextColor(0, 0, 0)
+      pdf.text(`You're potentially losing ${formatCurrency(lostRevenue)} annually`, margin, yPos)
+      pdf.text(`from customers who don't return.`, margin, yPos + 7)
+      yPos += 20
+
+      // Growth Potential Section
+      pdf.setFontSize(16)
+      pdf.setFont("helvetica", "bold")
+      pdf.setTextColor(34, 197, 94)
+      pdf.text("Your Growth Potential", margin, yPos)
+      yPos += 10
+
+      pdf.setFontSize(11)
+      pdf.setFont("helvetica", "normal")
+      pdf.setTextColor(0, 0, 0)
+      pdf.text(`With improved retention (${simRetentionRate}%) and optimized metrics:`, margin, yPos)
       yPos += 7
-    })
+      pdf.setFont("helvetica", "bold")
+      pdf.text(`Projected Annual Revenue: ${formatCurrency(simRevenue)}`, margin, yPos)
+      yPos += 7
+      pdf.setFont("helvetica", "normal")
+      pdf.text(`Potential Revenue Gain: ${formatCurrency(potentialGain)}`, margin, yPos)
+      yPos += 15
 
-    yPos += 10
+      // Recommendations Section
+      pdf.setFontSize(16)
+      pdf.setFont("helvetica", "bold")
+      pdf.setTextColor(20, 184, 166)
+      pdf.text("Recommended Actions", margin, yPos)
+      yPos += 10
 
-    // Lost Revenue Section
-    pdf.setFontSize(16)
-    pdf.setFont("helvetica", "bold")
-    pdf.setTextColor(239, 68, 68)
-    pdf.text("Revenue at Risk", margin, yPos)
-    yPos += 10
+      pdf.setFontSize(10)
+      pdf.setFont("helvetica", "normal")
+      pdf.setTextColor(0, 0, 0)
 
-    pdf.setFontSize(11)
-    pdf.setFont("helvetica", "normal")
-    pdf.setTextColor(0, 0, 0)
-    pdf.text(`You're potentially losing ${formatCurrency(lostRevenue)} annually`, margin, yPos)
-    pdf.text(`from customers who don't return.`, margin, yPos + 7)
-    yPos += 20
+      const recommendations = [
+        "1. Implement automated customer follow-up systems",
+        "2. Create personalized retention campaigns",
+        "3. Track customer behavior and preferences",
+        "4. Develop loyalty programs for repeat customers",
+        "5. Use data analytics to identify at-risk customers",
+        "6. Optimize customer acquisition channels",
+      ]
 
-    // Growth Potential Section
-    pdf.setFontSize(16)
-    pdf.setFont("helvetica", "bold")
-    pdf.setTextColor(34, 197, 94)
-    pdf.text("Your Growth Potential", margin, yPos)
-    yPos += 10
+      recommendations.forEach((rec) => {
+        pdf.text(rec, margin, yPos)
+        yPos += 6
+      })
 
-    pdf.setFontSize(11)
-    pdf.setFont("helvetica", "normal")
-    pdf.setTextColor(0, 0, 0)
-    pdf.text(`With improved retention (${simRetentionRate}%) and optimized metrics:`, margin, yPos)
-    yPos += 7
-    pdf.setFont("helvetica", "bold")
-    pdf.text(`Projected Annual Revenue: ${formatCurrency(simRevenue)}`, margin, yPos)
-    yPos += 7
-    pdf.setFont("helvetica", "normal")
-    pdf.text(`Potential Revenue Gain: ${formatCurrency(potentialGain)}`, margin, yPos)
-    yPos += 15
+      yPos += 10
 
-    // Recommendations Section
-    pdf.setFontSize(16)
-    pdf.setFont("helvetica", "bold")
-    pdf.setTextColor(20, 184, 166)
-    pdf.text("Recommended Actions", margin, yPos)
-    yPos += 10
+      // Footer
+      pdf.setFillColor(20, 184, 166)
+      pdf.rect(0, pdf.internal.pageSize.getHeight() - 30, pageWidth, 30, "F")
+      pdf.setTextColor(255, 255, 255)
+      pdf.setFontSize(10)
+      pdf.text("Contact: ramplywork@gmail.com", margin, pdf.internal.pageSize.getHeight() - 15)
+      pdf.text(
+        "Ready to unlock this growth? Book a free consultation today.",
+        margin,
+        pdf.internal.pageSize.getHeight() - 8,
+      )
 
-    pdf.setFontSize(10)
-    pdf.setFont("helvetica", "normal")
-    pdf.setTextColor(0, 0, 0)
+      const pdfBlob = pdf.output("blob")
+      const blobUrl = URL.createObjectURL(pdfBlob)
 
-    const recommendations = [
-      "1. Implement automated customer follow-up systems",
-      "2. Create personalized retention campaigns",
-      "3. Track customer behavior and preferences",
-      "4. Develop loyalty programs for repeat customers",
-      "5. Use data analytics to identify at-risk customers",
-      "6. Optimize customer acquisition channels",
-    ]
+      // Detect if mobile device
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 
-    recommendations.forEach((rec) => {
-      pdf.text(rec, margin, yPos)
-      yPos += 6
-    })
+      if (isMobile) {
+        const link = document.createElement("a")
+        link.href = blobUrl
+        link.download = "Business-Growth-Report.pdf"
+        link.target = "_blank"
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
 
-    yPos += 10
+        setTimeout(() => {
+          alert(
+            "Your report is ready! If download didn't start, please check your browser's download folder or allow pop-ups.",
+          )
+        }, 500)
+      } else {
+        pdf.save("Business-Growth-Report.pdf")
+      }
 
-    // Footer
-    pdf.setFillColor(20, 184, 166)
-    pdf.rect(0, pdf.internal.pageSize.getHeight() - 30, pageWidth, 30, "F")
-    pdf.setTextColor(255, 255, 255)
-    pdf.setFontSize(10)
-    pdf.text("Contact: ramplywork@gmail.com", margin, pdf.internal.pageSize.getHeight() - 15)
-    pdf.text(
-      "Ready to unlock this growth? Book a free consultation today.",
-      margin,
-      pdf.internal.pageSize.getHeight() - 8,
-    )
-
-    pdf.save("Business-Growth-Report.pdf")
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 100)
+    } catch (error) {
+      console.error("[v0] PDF generation error:", error)
+      alert("Sorry, there was an error generating your report. Please try again or contact us at ramplywork@gmail.com")
+    } finally {
+      setIsDownloading(false)
+    }
   }
 
   return (
@@ -252,7 +356,7 @@ export default function GrowthCalculator() {
         {/* Calculator Section */}
         <section className="py-12 md:py-20">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            {!showResults ? (
+            {!showEmailCapture && !showResults ? (
               <div className="mx-auto max-w-4xl">
                 <Card className="border-2">
                   <CardHeader>
@@ -417,6 +521,64 @@ export default function GrowthCalculator() {
                     >
                       Calculate My Growth Potential
                       <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            ) : showEmailCapture ? (
+              <div className="mx-auto max-w-2xl">
+                <Card className="border-2">
+                  <CardHeader>
+                    <CardTitle className="text-2xl md:text-3xl">Get Your Results</CardTitle>
+                    <CardDescription className="text-base">
+                      Enter your details to see your personalized growth analysis
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div>
+                      <label className="mb-2 block text-sm font-medium text-foreground">Business Name</label>
+                      <Input
+                        type="text"
+                        placeholder="Your Business Name"
+                        value={businessName}
+                        onChange={(e) => setBusinessName(e.target.value)}
+                        className="h-12"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-2 block text-sm font-medium text-foreground">Email Address</label>
+                      <Input
+                        type="email"
+                        placeholder="your@email.com"
+                        value={userEmail}
+                        onChange={(e) => setUserEmail(e.target.value)}
+                        className="h-12"
+                      />
+                      <p className="mt-2 text-xs text-muted-foreground">
+                        We'll send you a copy of your results and growth recommendations
+                      </p>
+                    </div>
+                    <Button
+                      onClick={handleSubmitAndShowResults}
+                      disabled={isSubmitting || !userEmail || !businessName}
+                      size="lg"
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-14 text-lg font-semibold"
+                    >
+                      {isSubmitting ? (
+                        "Calculating..."
+                      ) : (
+                        <>
+                          <Mail className="mr-2 h-5 w-5" />
+                          Show My Results
+                        </>
+                      )}
+                    </Button>
+                    <Button
+                      onClick={() => setShowEmailCapture(false)}
+                      variant="ghost"
+                      className="w-full text-muted-foreground"
+                    >
+                      ← Back to Calculator
                     </Button>
                   </CardContent>
                 </Card>
@@ -625,10 +787,11 @@ export default function GrowthCalculator() {
                         onClick={handleDownloadReport}
                         size="lg"
                         variant="outline"
-                        className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground sm:w-auto bg-transparent"
+                        disabled={isDownloading}
+                        className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground sm:w-auto bg-transparent disabled:opacity-50"
                       >
                         <Download className="mr-2 h-5 w-5" />
-                        Download Full Report
+                        {isDownloading ? "Generating PDF..." : "Download Full Report"}
                       </Button>
                       <Button
                         size="lg"
