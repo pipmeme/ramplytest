@@ -73,7 +73,7 @@ export const metadata: Metadata = {
     canonical: "https://ramplywork.com",
   },
   category: "Business Services",
-    generator: 'v0.app'
+  generator: "v0.app",
 }
 
 export default function RootLayout({
@@ -84,6 +84,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-PCM33PWL8L"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-PCM33PWL8L');
+            `,
+          }}
+        />
         <StructuredData />
         <meta name="application-name" content="Ramply Work" />
         <meta name="apple-mobile-web-app-title" content="Ramply Work" />
