@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { Download, ArrowLeft, Upload, X, Share2 } from "lucide-react"
+import { Download, ArrowLeft, Upload, X, Share2, QrCode } from "lucide-react"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
@@ -457,168 +457,188 @@ export default function QRGeneratorPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex min-h-screen flex-col">
       <Header />
-      <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        <Link href="/tools">
-          <Button variant="ghost" className="mb-6">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Tools
-          </Button>
-        </Link>
-
-        <div className="mb-8">
-          <h1 className="mb-2 text-3xl font-bold text-foreground md:text-4xl">Premium QR Code Generator</h1>
-          <p className="text-lg text-muted-foreground">
-            Create custom QR codes with advanced features - worth $12/month, completely free
-          </p>
-        </div>
-
-        <div className="grid gap-8 lg:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>QR Code Settings</CardTitle>
-              <CardDescription>Customize your QR code with advanced options</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="qr-type">QR Code Type</Label>
-                <Select value={qrType} onValueChange={setQrType}>
-                  <SelectTrigger id="qr-type">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="url">Website URL</SelectItem>
-                    <SelectItem value="wifi">WiFi Network</SelectItem>
-                    <SelectItem value="email">Email</SelectItem>
-                    <SelectItem value="phone">Phone Number</SelectItem>
-                    <SelectItem value="sms">SMS Message</SelectItem>
-                    <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                    <SelectItem value="location">Location</SelectItem>
-                    <SelectItem value="vcard">Contact Card</SelectItem>
-                    <SelectItem value="upi">UPI Payment</SelectItem>
-                    <SelectItem value="text">Plain Text</SelectItem>
-                  </SelectContent>
-                </Select>
+      <main className="flex-1">
+        <section className="relative overflow-hidden py-14 sm:py-18 md:py-24">
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-16 left-16 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
+            <div className="absolute bottom-10 right-20 w-64 h-64 bg-primary/3 rounded-full blur-3xl" />
+            <div
+              className="absolute inset-0 opacity-[0.02]"
+              style={{
+                backgroundImage: `radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)`,
+                backgroundSize: "40px 40px",
+              }}
+            />
+          </div>
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div className="mb-10 text-center">
+              <Link href="/tools">
+                <Button variant="ghost" className="mb-4 text-muted-foreground hover:text-foreground">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back to Tools
+                </Button>
+              </Link>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-6">
+                <QrCode className="h-3.5 w-3.5" />
+                Free Business Tool
               </div>
+              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground mb-4">
+                QR Code <span className="text-primary">Generator</span>
+              </h1>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                Create custom QR codes with advanced features — worth $12/month, completely free
+              </p>
+            </div>
 
-              {renderInputFields()}
-
-              <div className="space-y-2">
-                <Label htmlFor="logo">Logo (Optional)</Label>
-                {logoFile ? (
-                  <div className="flex items-center gap-2">
-                    <img src={logoFile || "/placeholder.svg"} alt="Logo" className="h-12 w-12 rounded object-cover" />
-                    <Button variant="outline" size="sm" onClick={removeLogo}>
-                      <X className="mr-2 h-4 w-4" />
-                      Remove Logo
-                    </Button>
+            <div className="grid gap-8 lg:grid-cols-2">
+              <Card className="border-border/50 bg-card/80 backdrop-blur-sm shadow-lg shadow-black/5">
+                <CardHeader>
+                  <CardTitle>QR Code Settings</CardTitle>
+                  <CardDescription>Customize your QR code with advanced options</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="qr-type">QR Code Type</Label>
+                    <Select value={qrType} onValueChange={setQrType}>
+                      <SelectTrigger id="qr-type">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="url">Website URL</SelectItem>
+                        <SelectItem value="wifi">WiFi Network</SelectItem>
+                        <SelectItem value="email">Email</SelectItem>
+                        <SelectItem value="phone">Phone Number</SelectItem>
+                        <SelectItem value="sms">SMS Message</SelectItem>
+                        <SelectItem value="whatsapp">WhatsApp</SelectItem>
+                        <SelectItem value="location">Location</SelectItem>
+                        <SelectItem value="vcard">Contact Card</SelectItem>
+                        <SelectItem value="upi">UPI Payment</SelectItem>
+                        <SelectItem value="text">Plain Text</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <Input id="logo" type="file" accept="image/*" onChange={handleLogoUpload} className="hidden" />
-                    <Button variant="outline" onClick={() => document.getElementById("logo")?.click()}>
-                      <Upload className="mr-2 h-4 w-4" />
-                      Upload Logo
-                    </Button>
+
+                  {renderInputFields()}
+
+                  <div className="space-y-2">
+                    <Label htmlFor="logo">Logo (Optional)</Label>
+                    {logoFile ? (
+                      <div className="flex items-center gap-2">
+                        <img src={logoFile || "/placeholder.svg"} alt="Logo" className="h-12 w-12 rounded object-cover" />
+                        <Button variant="outline" size="sm" onClick={removeLogo}>
+                          <X className="mr-2 h-4 w-4" />
+                          Remove Logo
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <Input id="logo" type="file" accept="image/*" onChange={handleLogoUpload} className="hidden" />
+                        <Button variant="outline" onClick={() => document.getElementById("logo")?.click()}>
+                          <Upload className="mr-2 h-4 w-4" />
+                          Upload Logo
+                        </Button>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="qr-color">QR Color</Label>
-                  <div className="flex gap-2">
-                    <Input
-                      id="qr-color"
-                      type="color"
-                      value={qrColor}
-                      onChange={(e) => setQrColor(e.target.value)}
-                      className="h-10 w-20"
-                    />
-                    <Input value={qrColor} onChange={(e) => setQrColor(e.target.value)} />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="qr-bg-color">Background</Label>
-                  <div className="flex gap-2">
-                    <Input
-                      id="qr-bg-color"
-                      type="color"
-                      value={qrBgColor}
-                      onChange={(e) => setQrBgColor(e.target.value)}
-                      className="h-10 w-20"
-                    />
-                    <Input value={qrBgColor} onChange={(e) => setQrBgColor(e.target.value)} />
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="qr-size">Size (px)</Label>
-                <Select value={qrSize} onValueChange={setQrSize}>
-                  <SelectTrigger id="qr-size">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="200">200x200</SelectItem>
-                    <SelectItem value="300">300x300</SelectItem>
-                    <SelectItem value="400">400x400</SelectItem>
-                    <SelectItem value="500">500x500</SelectItem>
-                    <SelectItem value="1000">1000x1000</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Preview & Download</CardTitle>
-              <CardDescription>Your QR code will appear here</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="flex min-h-[300px] items-center justify-center rounded-lg border-2 border-dashed border-border bg-muted/20 p-8">
-                {qrData ? (
-                  <div ref={canvasRef} />
-                ) : (
-                  <p className="text-center text-muted-foreground">Fill in the fields to generate QR code</p>
-                )}
-              </div>
-
-              {qrData && (
-                <>
-                  <div className="space-y-3">
-                    <div className="flex gap-4">
-                      <Button onClick={() => handleDownload("png")} className="flex-1">
-                        <Download className="mr-2 h-4 w-4" />
-                        {isMobile ? "Save" : "Download"} PNG
-                      </Button>
-                      <Button onClick={() => handleDownload("svg")} variant="outline" className="flex-1">
-                        <Download className="mr-2 h-4 w-4" />
-                        {isMobile ? "Save" : "Download"} SVG
-                      </Button>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="qr-color">QR Color</Label>
+                      <div className="flex gap-2">
+                        <Input
+                          id="qr-color"
+                          type="color"
+                          value={qrColor}
+                          onChange={(e) => setQrColor(e.target.value)}
+                          className="h-10 w-20"
+                        />
+                        <Input value={qrColor} onChange={(e) => setQrColor(e.target.value)} />
+                      </div>
                     </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="qr-bg-color">Background</Label>
+                      <div className="flex gap-2">
+                        <Input
+                          id="qr-bg-color"
+                          type="color"
+                          value={qrBgColor}
+                          onChange={(e) => setQrBgColor(e.target.value)}
+                          className="h-10 w-20"
+                        />
+                        <Input value={qrBgColor} onChange={(e) => setQrBgColor(e.target.value)} />
+                      </div>
+                    </div>
+                  </div>
 
-                    {isMobile && (
-                      <Button onClick={handleShare} variant="secondary" className="w-full">
-                        <Share2 className="mr-2 h-4 w-4" />
-                        Share QR Code
-                      </Button>
-                    )}
+                  <div className="space-y-2">
+                    <Label htmlFor="qr-size">Size (px)</Label>
+                    <Select value={qrSize} onValueChange={setQrSize}>
+                      <SelectTrigger id="qr-size">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="200">200x200</SelectItem>
+                        <SelectItem value="300">300x300</SelectItem>
+                        <SelectItem value="400">400x400</SelectItem>
+                        <SelectItem value="500">500x500</SelectItem>
+                        <SelectItem value="1000">1000x1000</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </CardContent>
+              </Card>
 
-                    {isMobile && (
-                      <p className="text-xs text-center text-muted-foreground">
-                        Tap "Save" to view image, then long-press to save to your device
-                      </p>
+              <Card className="border-border/50 bg-card/80 backdrop-blur-sm shadow-lg shadow-black/5">
+                <CardHeader>
+                  <CardTitle>Preview & Download</CardTitle>
+                  <CardDescription>Your QR code will appear here</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="flex min-h-[300px] items-center justify-center rounded-lg border-2 border-dashed border-border bg-muted/20 p-8">
+                    {qrData ? (
+                      <div ref={canvasRef} />
+                    ) : (
+                      <p className="text-center text-muted-foreground">Fill in the fields to generate QR code</p>
                     )}
                   </div>
-                </>
-              )}
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+
+                  {qrData && (
+                    <>
+                      <div className="space-y-3">
+                        <div className="flex gap-4">
+                          <Button onClick={() => handleDownload("png")} className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-lg transition-all">
+                            <Download className="mr-2 h-4 w-4" />
+                            {isMobile ? "Save" : "Download"} PNG
+                          </Button>
+                          <Button onClick={() => handleDownload("svg")} variant="outline" className="flex-1 hover:bg-primary/5">
+                            <Download className="mr-2 h-4 w-4" />
+                            {isMobile ? "Save" : "Download"} SVG
+                          </Button>
+                        </div>
+
+                        {isMobile && (
+                          <Button onClick={handleShare} variant="secondary" className="w-full">
+                            <Share2 className="mr-2 h-4 w-4" />
+                            Share QR Code
+                          </Button>
+                        )}
+
+                        {isMobile && (
+                          <p className="text-xs text-center text-muted-foreground">
+                            Tap "Save" to view image, then long-press to save to your device
+                          </p>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+      </main>
       <Footer />
 
       {showImageModal && (

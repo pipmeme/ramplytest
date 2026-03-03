@@ -335,17 +335,28 @@ export default function GrowthCalculator() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative overflow-hidden border-b border-border bg-gradient-to-b from-primary/5 to-background py-16 md:py-24">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-4xl text-center">
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
-                <TrendingUp className="h-4 w-4" />
-                Free Business Growth Calculator
+        <section className="relative overflow-hidden py-16 sm:py-20 md:py-28">
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-16 right-16 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
+            <div className="absolute bottom-10 left-20 w-80 h-80 bg-primary/3 rounded-full blur-3xl" />
+            <div
+              className="absolute inset-0 opacity-[0.02]"
+              style={{
+                backgroundImage: `radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)`,
+                backgroundSize: "40px 40px",
+              }}
+            />
+          </div>
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div className="mx-auto max-w-3xl text-center">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-6">
+                <TrendingUp className="h-3.5 w-3.5" />
+                Free Growth Calculator
               </div>
-              <h1 className="mb-6 text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl">
-                Calculate Your Business Growth Potential
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground mb-5 leading-tight">
+                Calculate Your <span className="text-primary">Growth</span> Potential
               </h1>
-              <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground md:text-xl">
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 Discover your Customer Lifetime Value, identify lost revenue, and see exactly how much your business
                 could grow with better retention strategies.
               </p>
@@ -358,7 +369,7 @@ export default function GrowthCalculator() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             {!showEmailCapture && !showResults ? (
               <div className="mx-auto max-w-4xl">
-                <Card className="border-2">
+                <Card className="border-border/50 bg-card/80 backdrop-blur-sm shadow-xl shadow-black/5">
                   <CardHeader>
                     <CardTitle className="text-2xl md:text-3xl">Enter Your Business Metrics</CardTitle>
                     <CardDescription className="text-base">
@@ -527,7 +538,7 @@ export default function GrowthCalculator() {
               </div>
             ) : showEmailCapture ? (
               <div className="mx-auto max-w-2xl">
-                <Card className="border-2">
+                <Card className="border-border/50 bg-card/80 backdrop-blur-sm shadow-xl shadow-black/5">
                   <CardHeader>
                     <CardTitle className="text-2xl md:text-3xl">Get Your Results</CardTitle>
                     <CardDescription className="text-base">
@@ -631,7 +642,7 @@ export default function GrowthCalculator() {
                 </div>
 
                 {/* Growth Simulator */}
-                <Card className="border-2">
+                <Card className="border-border/50 bg-card/80 backdrop-blur-sm">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-2xl">
                       <Target className="h-6 w-6 text-primary" />
@@ -728,7 +739,7 @@ export default function GrowthCalculator() {
                 </Card>
 
                 {/* Recommendations */}
-                <Card className="border-2">
+                <Card className="border-border/50 bg-card/80 backdrop-blur-sm">
                   <CardHeader>
                     <CardTitle className="text-2xl">Personalized Recommendations</CardTitle>
                     <CardDescription>Based on your business metrics, here's how to unlock growth</CardDescription>
@@ -773,8 +784,9 @@ export default function GrowthCalculator() {
                 </Card>
 
                 {/* CTA Section */}
-                <Card className="border-2 border-primary bg-gradient-to-br from-primary/10 to-background">
-                  <CardContent className="p-8 text-center">
+                <Card className="border-primary/20 bg-gradient-to-br from-card via-card to-primary/5 overflow-hidden relative">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-primary/8 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4 pointer-events-none" />
+                  <CardContent className="p-8 text-center relative">
                     <h3 className="mb-4 text-2xl font-bold text-foreground md:text-3xl">
                       Ready to Unlock This Growth?
                     </h3>
@@ -826,13 +838,13 @@ export default function GrowthCalculator() {
         </section>
 
         {/* Educational Section */}
-        <section className="border-t border-border bg-muted/30 py-12 md:py-16">
+        <section className="py-16 md:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-4xl">
-              <h2 className="mb-8 text-center text-2xl font-bold text-foreground md:text-3xl">
-                Understanding Your Metrics
+              <h2 className="mb-8 text-center text-3xl font-bold text-foreground md:text-4xl">
+                Understanding Your <span className="text-primary">Metrics</span>
               </h2>
-              <div className="grid gap-6 md:grid-cols-2">
+              <div className="grid gap-5 md:grid-cols-2">
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-lg">

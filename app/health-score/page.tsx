@@ -45,7 +45,14 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import jsPDF from "jspdf"
 import { detectUserCurrency, currencies, getCurrencySymbol } from "@/lib/currency-utils"
+import { motion } from "framer-motion"
 
+// Category labels for the breakdown
+const SCORING_CATEGORIES = [
+  { id: "growth", label: "Growth & Sales", icon: TrendingUp },
+  { id: "operations", label: "Systems & Operations", icon: Zap },
+  { id: "experience", label: "Customer Experience", icon: Users },
+]
 interface Question {
   id: string
   question: string
@@ -1553,11 +1560,40 @@ export default function HealthScorePage() {
   }
 
   const getScoreCategory = (score: number) => {
-    if (score >= 80) return { label: "Excellent", color: "text-green-600", bg: "bg-green-50", icon: CheckCircle2 }
+    if (score >= 80) return { label: "Excellent", color: "text-primary", bg: "bg-primary/10", icon: CheckCircle2 }
     if (score >= 60) return { label: "Good", color: "text-blue-600", bg: "bg-blue-50", icon: TrendingUp }
     if (score >= 40)
       return { label: "Needs Improvement", color: "text-orange-600", bg: "bg-orange-50", icon: AlertTriangle }
     return { label: "Critical", color: "text-red-600", bg: "bg-red-50", icon: AlertTriangle }
+  }
+
+  const calculateCategoryScores = () => {
+    if (!industryConfig) return { growth: 0, operations: 0, experience: 0 }
+
+    // Divide the 8 questions into 3 logical buckets
+    // Q0-Q2: Growth/Sales (Index 0,1,2)
+    // Q3-Q5: Operations/Systems (Index 3,4,5)
+    // Q6-Q7: Customer Experience (Index 6,7)
+
+    const getBucketScore = (start: number, end: number) => {
+      let bucketTotal = 0;
+      let bucketMax = 0;
+      for (let i = start; i <= Math.min(end, industryConfig.questions.length - 1); i++) {
+        const q = industryConfig.questions[i];
+        if (!q) continue;
+        const answer = answers[q.id];
+        const option = q.options.find(opt => opt.value === answer);
+        if (option) bucketTotal += option.points;
+        bucketMax += Math.max(...q.options.map((o) => o.points));
+      }
+      return bucketMax === 0 ? 0 : Math.round((bucketTotal / bucketMax) * 100);
+    }
+
+    return {
+      growth: getBucketScore(0, 2),
+      operations: getBucketScore(3, 5),
+      experience: getBucketScore(6, 7)
+    }
   }
 
   const getRecommendations = () => {
@@ -1700,9 +1736,15 @@ export default function HealthScorePage() {
     doc.setFontSize(9)
     doc.text("ramplywork@gmail.com", pageWidth / 2, yPos + 20, { align: "center" })
 
-    doc.save(
-      `${businessName.replace(/\s+/g, "-") || "Business"}-Health-Report-${new Date().toISOString().split("T")[0]}.pdf`,
-    )
+    const cleanBizName = (businessName || "Your-Business")
+      .replace(/[^a-zA-Z0-9-]/g, "-") // Replace any non-alphanumeric chars with dashes
+      .replace(/-+/g, "-") // Clean up multiple dashes
+      .replace(/^-|-$/g, ""); // Trim dashes from start/end
+
+    const dateStr = new Date().toISOString().split("T")[0];
+    const fileName = `Ramply-Health-Report-${cleanBizName}-${dateStr}.pdf`;
+
+    doc.save(fileName);
   }
 
   const handleShare = (platform: string) => {
@@ -1803,150 +1845,177 @@ Follow up within 24 hours for best conversion.`,
   }
 
   if (showResults) {
+    const categoryScores = calculateCategoryScores()
+
     return (
       <>
         <Header />
         <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 py-12 px-4">
-          <div className="container mx-auto max-w-4xl">
-            {/* Score Display */}
-            <Card className="mb-8 overflow-hidden border-2 animate-in fade-in slide-in-from-bottom-4 duration-700">
-              <CardContent className="p-8 md:p-12">
-                <div className="text-center mb-8">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-4">
-                    <Sparkles className="h-4 w-4" />
-                    <span className="text-sm font-semibold">Your Results Are Ready</span>
-                  </div>
-                  <h1 className="text-3xl md:text-4xl font-bold mb-2">Business Health Score</h1>
-                  <p className="text-muted-foreground">{businessName || "Your Business"}</p>
-                  <p className="text-sm text-muted-foreground">{industryConfig?.label}</p>
-                </div>
+          <div className="container mx-auto max-w-5xl">
+            {/* Header / Score Display */}
+            <div className="grid lg:grid-cols-[1fr_300px] gap-8 mb-8">
+              <Card className="overflow-hidden border-2 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                <CardContent className="p-8 md:p-12">
+                  <div className="text-center md:text-left mb-8 flex flex-col md:flex-row gap-8 items-center md:items-start justify-between">
+                    <div>
+                      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-4">
+                        <Sparkles className="h-4 w-4" />
+                        <span className="text-sm font-semibold">Your Results Are Ready</span>
+                      </div>
+                      <h1 className="text-3xl md:text-4xl font-bold mb-2">Business Health Score</h1>
+                      <p className="text-muted-foreground text-lg mb-1">{businessName || "Your Business"}</p>
+                      <p className="text-sm text-muted-foreground flex items-center gap-2 md:justify-start justify-center">
+                        <BarChart3 className="h-4 w-4 text-primary" />
+                        {industryConfig?.label}
+                      </p>
+                    </div>
 
-                <div className="flex flex-col items-center mb-8">
-                  <div className="relative w-48 h-48 mb-6">
-                    <svg className="w-full h-full transform -rotate-90">
-                      <circle
-                        cx="96"
-                        cy="96"
-                        r="88"
-                        stroke="currentColor"
-                        strokeWidth="12"
-                        fill="none"
-                        className="text-muted/20"
-                      />
-                      <circle
-                        cx="96"
-                        cy="96"
-                        r="88"
-                        stroke="currentColor"
-                        strokeWidth="12"
-                        fill="none"
-                        strokeDasharray={`${2 * Math.PI * 88}`}
-                        strokeDashoffset={`${2 * Math.PI * 88 * (1 - score / 100)}`}
-                        className={category?.color}
-                        strokeLinecap="round"
-                        style={{ transition: "stroke-dashoffset 2s ease-out" }}
-                      />
-                    </svg>
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="text-5xl font-bold">{score}</span>
-                      <span className="text-sm text-muted-foreground">out of 100</span>
+                    <div className="flex flex-col items-center">
+                      <div className="relative w-40 h-40 mb-4">
+                        <svg className="w-full h-full transform -rotate-90">
+                          <circle
+                            cx="80"
+                            cy="80"
+                            r="72"
+                            stroke="currentColor"
+                            strokeWidth="10"
+                            fill="none"
+                            className="text-muted/30"
+                          />
+                          <motion.circle
+                            cx="80"
+                            cy="80"
+                            r="72"
+                            stroke="currentColor"
+                            strokeWidth="10"
+                            fill="none"
+                            strokeDasharray={`${2 * Math.PI * 72}`}
+                            initial={{ strokeDashoffset: 2 * Math.PI * 72 }}
+                            animate={{ strokeDashoffset: `${2 * Math.PI * 72 * (1 - score / 100)}` }}
+                            transition={{ duration: 1.5, ease: "easeOut" }}
+                            className={category?.color}
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+                          <motion.span
+                            initial={{ opacity: 0, scale: 0.5 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.5, duration: 0.5 }}
+                            className="text-4xl font-bold"
+                          >
+                            {score}
+                          </motion.span>
+                          <span className="text-xs text-muted-foreground uppercase tracking-widest mt-1">out of 100</span>
+                        </div>
+                      </div>
+
+                      {category && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 1 }}
+                          className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm ${category.bg}`}
+                        >
+                          <category.icon className={`h-4 w-4 ${category.color}`} />
+                          <span className={`font-semibold ${category.color}`}>{category.label} Score</span>
+                        </motion.div>
+                      )}
                     </div>
                   </div>
 
-                  {category && (
-                    <div className={`inline-flex items-center gap-2 px-6 py-3 rounded-full ${category.bg}`}>
-                      <category.icon className={`h-5 w-5 ${category.color}`} />
-                      <span className={`font-semibold ${category.color}`}>{category.label}</span>
-                    </div>
-                  )}
-                </div>
+                  {/* Share Buttons */}
+                  <div className="flex flex-wrap gap-3 justify-center md:justify-start pt-6 border-t border-border/50">
+                    <Button variant="outline" size="sm" onClick={() => handleShare("whatsapp")} className="gap-2">
+                      <Share2 className="h-4 w-4 text-primary" />
+                      WhatsApp
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => handleShare("email")} className="gap-2">
+                      <Mail className="h-4 w-4 text-primary" />
+                      Email
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => handleShare("linkedin")} className="gap-2">
+                      <Share2 className="h-4 w-4 text-primary" />
+                      LinkedIn
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => handleShare("copy")} className="gap-2">
+                      <Copy className="h-4 w-4 text-primary" />
+                      Copy Link
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
 
-                {/* Share Buttons */}
-                <div className="flex flex-wrap gap-3 justify-center mb-8">
-                  <Button variant="outline" size="sm" onClick={() => handleShare("whatsapp")} className="gap-2">
-                    <Share2 className="h-4 w-4" />
-                    WhatsApp
-                  </Button>
-                  <Button variant="outline" size="sm" onClick={() => handleShare("email")} className="gap-2">
-                    <Mail className="h-4 w-4" />
-                    Email
-                  </Button>
-                  <Button variant="outline" size="sm" onClick={() => handleShare("linkedin")} className="gap-2">
-                    <Share2 className="h-4 w-4" />
-                    LinkedIn
-                  </Button>
-                  <Button variant="outline" size="sm" onClick={() => handleShare("copy")} className="gap-2">
-                    <Copy className="h-4 w-4" />
-                    Copy Link
-                  </Button>
-                </div>
-
-                {/* Quick Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                  <div className="text-center p-4 rounded-lg bg-muted/50">
-                    <BarChart3 className="h-6 w-6 mx-auto mb-2 text-primary" />
-                    <div className="text-2xl font-bold">{industryConfig?.label}</div>
-                    <div className="text-sm text-muted-foreground">Industry</div>
-                  </div>
-                  <div className="text-center p-4 rounded-lg bg-muted/50">
-                    <Zap className="h-6 w-6 mx-auto mb-2 text-primary" />
-                    <div className="text-2xl font-bold">{getCurrencySymbol(currency)}</div>
-                    <div className="text-sm text-muted-foreground">Currency</div>
-                  </div>
-                  <div className="text-center p-4 rounded-lg bg-muted/50">
-                    <Target className="h-6 w-6 mx-auto mb-2 text-primary" />
-                    <div className="text-2xl font-bold">{recommendations.length}</div>
-                    <div className="text-sm text-muted-foreground">Priority Actions</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+              {/* Category Breakdown */}
+              <div className="space-y-4 animate-in fade-in slide-in-from-right-8 duration-700 delay-200">
+                <h3 className="text-lg font-bold mb-2">Category Breakdown</h3>
+                {[
+                  { key: "growth", label: "Growth & Sales", score: categoryScores.growth, icon: TrendingUp },
+                  { key: "operations", label: "Systems & Ops", score: categoryScores.operations, icon: Zap },
+                  { key: "experience", label: "Customer Exp.", score: categoryScores.experience, icon: Users },
+                ].map((cat, i) => (
+                  <Card key={cat.key} className="overflow-hidden border border-border/50 shadow-sm">
+                    <CardContent className="p-4 flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                          <cat.icon className="w-4 h-4 text-primary" />
+                        </div>
+                        <div>
+                          <p className="font-semibold text-sm">{cat.label}</p>
+                          <div className="w-32 h-1.5 mt-1.5 bg-muted rounded-full overflow-hidden">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              animate={{ width: `${cat.score}%` }}
+                              transition={{ duration: 1, delay: 0.5 + (i * 0.2) }}
+                              className={`h-full ${cat.score >= 80 ? 'bg-primary' : cat.score >= 60 ? 'bg-blue-500' : 'bg-orange-500'}`}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-lg font-bold">{cat.score}</span>
+                        <span className="text-xs text-muted-foreground block">/100</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
 
             {/* Recommendations */}
             {recommendations.length > 0 && (
-              <div className="mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
-                <h2 className="text-2xl font-bold mb-6">Your Personalized Action Plan</h2>
-                <div className="space-y-4">
+              <div className="mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                    <Target className="h-5 w-5 text-primary" />
+                  </div>
+                  <h2 className="text-2xl font-bold">Your Personalized Action Plan</h2>
+                </div>
+                <div className="grid md:grid-cols-2 gap-4">
                   {recommendations.map((rec, index) => (
-                    <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow">
+                    <Card key={index} className="overflow-hidden hover:shadow-lg transition-all hover:border-primary/30 group">
                       <CardContent className="p-6">
                         <div className="flex items-start gap-4">
-                          <div
-                            className={`p-3 rounded-lg ${
-                              rec.impact === "Critical"
-                                ? "bg-red-100"
-                                : rec.impact === "High"
-                                  ? "bg-orange-100"
-                                  : "bg-blue-100"
-                            }`}
-                          >
-                            <Target
-                              className={`h-6 w-6 ${
-                                rec.impact === "Critical"
-                                  ? "text-red-600"
-                                  : rec.impact === "High"
-                                    ? "text-orange-600"
-                                    : "text-blue-600"
-                              }`}
-                            />
-                          </div>
                           <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
-                              <h3 className="font-semibold text-lg">{rec.title}</h3>
+                            <div className="flex items-center gap-2 mb-3">
                               <span
-                                className={`text-xs px-2 py-1 rounded-full ${
-                                  rec.impact === "Critical"
-                                    ? "bg-red-100 text-red-700"
-                                    : rec.impact === "High"
-                                      ? "bg-orange-100 text-orange-700"
-                                      : "bg-blue-100 text-blue-700"
-                                }`}
+                                className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-sm ${rec.impact === "Critical"
+                                  ? "bg-red-100 text-red-700"
+                                  : rec.impact === "High"
+                                    ? "bg-orange-100 text-orange-700"
+                                    : "bg-blue-100 text-blue-700"
+                                  }`}
                               >
-                                {rec.impact} Impact
+                                {rec.impact} Priority
                               </span>
                             </div>
-                            <p className="text-muted-foreground mb-2">{rec.description}</p>
-                            <p className="text-sm text-primary font-medium">→ Solution: {rec.service}</p>
+                            <h3 className="font-bold text-lg mb-2 leading-tight group-hover:text-primary transition-colors">{rec.title}</h3>
+                            <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{rec.description}</p>
+
+                            <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary bg-primary/5 px-2.5 py-1.5 rounded-md">
+                              <CheckCircle2 className="w-3.5 h-3.5" />
+                              Solution: {rec.service}
+                            </div>
                           </div>
                         </div>
                       </CardContent>
@@ -1956,20 +2025,39 @@ Follow up within 24 hours for best conversion.`,
               </div>
             )}
 
-            {/* CTA Section */}
-            <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500">
-              <CardContent className="p-8 text-center">
-                <h3 className="text-2xl font-bold mb-4">Ready to Improve Your Score?</h3>
-                <p className="text-muted-foreground mb-6 max-w-2xl mx-auto text-balance">
-                  Get a personalized implementation plan and see how Ramply Work can help you achieve an 80+ score in 90
-                  days.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button size="lg" className="bg-primary hover:bg-primary/90 text-lg px-8 h-14" asChild>
-                    <a href="/contact">Book Free Consultation</a>
+            {/* Dynamic CTA Section */}
+            <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+              <CardContent className="p-8 md:p-12 text-center relative z-10">
+                {score < 50 ? (
+                  <>
+                    <h3 className="text-3xl font-bold mb-4">Your Business Needs Urgent Systems</h3>
+                    <p className="text-muted-foreground mb-8 max-w-2xl mx-auto text-lg">
+                      Based on your score of {score}/100, manual work and lack of systems are costing you serious time and money right now. Let's fix this before it bottlenecks your growth further.
+                    </p>
+                  </>
+                ) : score < 75 ? (
+                  <>
+                    <h3 className="text-3xl font-bold mb-4">You're Halfway to Scale-Ready</h3>
+                    <p className="text-muted-foreground mb-8 max-w-2xl mx-auto text-lg">
+                      You have a solid foundation with a {score}/100 score, but there are clear gaps in your automation. Let's build a roadmap to plug these leaks and accelerate your growth.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <h3 className="text-3xl font-bold mb-4">You're Ready for Hyper-Scale!</h3>
+                    <p className="text-muted-foreground mb-8 max-w-2xl mx-auto text-lg">
+                      An excellent score of {score}/100 means your foundation is strong. Now it's time to layer in advanced automations and data tracking to scale without adding headcount.
+                    </p>
+                  </>
+                )}
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                  <Button size="lg" className="bg-primary hover:bg-primary/90 text-lg px-8 h-14 shadow-md hover:shadow-lg hover:scale-105 transition-all" asChild>
+                    <a href="/contact">Book Free Strategy Call</a>
                   </Button>
-                  <Button size="lg" variant="outline" className="gap-2 bg-transparent" onClick={handleDownloadReport}>
-                    <Download className="h-4 w-4" />
+                  <Button size="lg" variant="outline" className="gap-2 bg-background hover:bg-muted text-foreground border-border h-14" onClick={handleDownloadReport}>
+                    <Download className="h-4 w-4 text-primary" />
                     Download Full Report
                   </Button>
                 </div>
@@ -2213,11 +2301,10 @@ Follow up within 24 hours for best conversion.`,
                     {currentQuestion.options.map((option) => (
                       <div
                         key={option.value}
-                        className={`flex items-center space-x-3 p-4 rounded-lg border-2 transition-all cursor-pointer hover:border-primary/50 hover:bg-primary/5 ${
-                          answers[currentQuestion.id] === option.value
-                            ? "border-primary bg-primary/10"
-                            : "border-border"
-                        }`}
+                        className={`flex items-center space-x-3 p-4 rounded-lg border-2 transition-all cursor-pointer hover:border-primary/50 hover:bg-primary/5 ${answers[currentQuestion.id] === option.value
+                          ? "border-primary bg-primary/10"
+                          : "border-border"
+                          }`}
                         onClick={() => handleAnswer(option.value)}
                       >
                         <RadioGroupItem value={option.value} id={option.value} />

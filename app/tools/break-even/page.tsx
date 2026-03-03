@@ -437,9 +437,8 @@ Timestamp: ${new Date().toLocaleString()}
 
       pdf.setFontSize(9)
       pdf.setTextColor(60, 60, 60)
-      const benchmarkText = `Your contribution margin of ${metrics.contributionMarginPercent}% is ${
-        Number.parseFloat(metrics.contributionMarginPercent) >= 40 ? "healthy and above" : "below"
-      } the typical ${businessType} industry range of 40-60%.`
+      const benchmarkText = `Your contribution margin of ${metrics.contributionMarginPercent}% is ${Number.parseFloat(metrics.contributionMarginPercent) >= 40 ? "healthy and above" : "below"
+        } the typical ${businessType} industry range of 40-60%.`
       const benchmarkLines = pdf.splitTextToSize(benchmarkText, pageWidth - 50)
       pdf.text(benchmarkLines, 20, yPos + 16)
 
@@ -457,9 +456,8 @@ Timestamp: ${new Date().toLocaleString()}
           title: "Reduce Fixed Costs",
           text: `Reducing fixed costs by 10% would lower your break-even point to ${Math.ceil(
             (Number.parseFloat(fixedCosts) * 0.9) / metrics.contributionMargin,
-          )} units - that's ${
-            metrics.breakEvenUnits - Math.ceil((Number.parseFloat(fixedCosts) * 0.9) / metrics.contributionMargin)
-          } fewer units needed.`,
+          )} units - that's ${metrics.breakEvenUnits - Math.ceil((Number.parseFloat(fixedCosts) * 0.9) / metrics.contributionMargin)
+            } fewer units needed.`,
         })
         recommendations.push({
           title: "Optimize Pricing Strategy",
@@ -569,689 +567,714 @@ Timestamp: ${new Date().toLocaleString()}
 
   if (step === "results") {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+      <div className="flex min-h-screen flex-col">
         <Header />
-        <div className="py-12">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mb-8 flex items-center justify-between">
-              <Link href="/tools">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="mr-2 h-4 w-4" />
-                  Back to Tools
-                </Button>
-              </Link>
-              <div className="text-sm text-muted-foreground">
-                Currency: {CURRENCIES[currency].name} ({CURRENCIES[currency].symbol})
-              </div>
+        <main className="flex-1">
+          <section className="relative overflow-hidden py-12 md:py-16">
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute top-10 right-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+              <div
+                className="absolute inset-0 opacity-[0.02]"
+                style={{
+                  backgroundImage: `radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)`,
+                  backgroundSize: "40px 40px",
+                }}
+              />
             </div>
-
-            <div className="mx-auto max-w-6xl space-y-8">
-              {/* Header */}
-              <div className="text-center">
-                <h1 className="mb-4 text-4xl font-bold text-foreground">Your Break-Even Analysis</h1>
-                <p className="text-lg text-muted-foreground">
-                  Complete path to profitability with 12-month projections
-                </p>
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+              <div className="mb-8 flex items-center justify-between">
+                <Link href="/tools">
+                  <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back to Tools
+                  </Button>
+                </Link>
+                <div className="text-sm text-muted-foreground">
+                  Currency: {CURRENCIES[currency].name} ({CURRENCIES[currency].symbol})
+                </div>
               </div>
 
-              {/* Key Metrics */}
-              <div className="grid gap-6 md:grid-cols-4">
-                <Card className="border-2 border-orange-500/20 bg-orange-500/5">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-orange-600">
-                      <Target className="h-5 w-5" />
-                      Break-Even
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-3xl font-bold text-foreground">{metrics.breakEvenUnits}</p>
-                    <p className="text-sm text-muted-foreground">units/month</p>
-                  </CardContent>
-                </Card>
+              <div className="mx-auto max-w-6xl space-y-8">
+                {/* Header */}
+                <div className="text-center">
+                  <h1 className="mb-4 text-4xl font-bold text-foreground">Your Break-Even Analysis</h1>
+                  <p className="text-lg text-muted-foreground">
+                    Complete path to profitability with 12-month projections
+                  </p>
+                </div>
 
-                <Card
-                  className={`border-2 ${
-                    metrics.currentProfit >= 0 ? "border-green-500/20 bg-green-500/5" : "border-red-500/20 bg-red-500/5"
-                  }`}
-                >
-                  <CardHeader>
-                    <CardTitle
-                      className={`flex items-center gap-2 ${
-                        metrics.currentProfit >= 0 ? "text-green-600" : "text-red-600"
+                {/* Key Metrics */}
+                <div className="grid gap-6 md:grid-cols-4">
+                  <Card className="border-2 border-orange-500/20 bg-orange-500/5">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-orange-600">
+                        <Target className="h-5 w-5" />
+                        Break-Even
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-3xl font-bold text-foreground">{metrics.breakEvenUnits}</p>
+                      <p className="text-sm text-muted-foreground">units/month</p>
+                    </CardContent>
+                  </Card>
+
+                  <Card
+                    className={`border-2 ${metrics.currentProfit >= 0 ? "border-green-500/20 bg-green-500/5" : "border-red-500/20 bg-red-500/5"
                       }`}
-                    >
-                      <DollarSign className="h-5 w-5" />
-                      Current Status
+                  >
+                    <CardHeader>
+                      <CardTitle
+                        className={`flex items-center gap-2 ${metrics.currentProfit >= 0 ? "text-green-600" : "text-red-600"
+                          }`}
+                      >
+                        <DollarSign className="h-5 w-5" />
+                        Current Status
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p
+                        className={`text-3xl font-bold ${metrics.currentProfit >= 0 ? "text-green-600" : "text-red-600"}`}
+                      >
+                        {formatCurrency(Math.abs(metrics.currentProfit))}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {metrics.currentProfit >= 0 ? "Monthly Profit" : "Monthly Loss"}
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-2 border-blue-500/20 bg-blue-500/5">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-blue-600">
+                        <TrendingUp className="h-5 w-5" />
+                        To Break Even
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      {metrics.unitsNeeded > 0 ? (
+                        <>
+                          <p className="text-3xl font-bold text-foreground">{metrics.unitsNeeded}</p>
+                          <p className="text-sm text-muted-foreground">more units (+{metrics.percentageIncrease}%)</p>
+                        </>
+                      ) : (
+                        <>
+                          <p className="text-2xl font-bold text-green-600">Profitable!</p>
+                          <p className="text-sm text-muted-foreground">Keep growing</p>
+                        </>
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-2 border-purple-500/20 bg-purple-500/5">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-purple-600">
+                        <BarChart3 className="h-5 w-5" />
+                        Margin
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-3xl font-bold text-foreground">{metrics.contributionMarginPercent}%</p>
+                      <p className="text-sm text-muted-foreground">{formatCurrency(metrics.contributionMargin)}/unit</p>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Calendar className="h-5 w-5" />
+                      12-Month Cash Flow Projection
                     </CardTitle>
+                    <CardDescription>
+                      Projected revenue, costs, and cumulative profit (assuming 5% monthly growth)
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <p
-                      className={`text-3xl font-bold ${metrics.currentProfit >= 0 ? "text-green-600" : "text-red-600"}`}
-                    >
-                      {formatCurrency(Math.abs(metrics.currentProfit))}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {metrics.currentProfit >= 0 ? "Monthly Profit" : "Monthly Loss"}
-                    </p>
+                    <div className="h-[400px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart data={cashFlowData}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="month" />
+                          <YAxis />
+                          <Tooltip
+                            formatter={(value: number) => formatCurrency(value)}
+                            labelFormatter={(label) => label}
+                          />
+                          <Legend />
+                          <Area
+                            type="monotone"
+                            dataKey="revenue"
+                            stackId="1"
+                            stroke="#10b981"
+                            fill="#10b981"
+                            fillOpacity={0.6}
+                            name="Revenue"
+                          />
+                          <Area
+                            type="monotone"
+                            dataKey="cost"
+                            stackId="2"
+                            stroke="#ef4444"
+                            fill="#ef4444"
+                            fillOpacity={0.6}
+                            name="Costs"
+                          />
+                          <Line
+                            type="monotone"
+                            dataKey="cumulative"
+                            stroke="#ff6600"
+                            strokeWidth={3}
+                            name="Cumulative Profit"
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </div>
                   </CardContent>
                 </Card>
 
-                <Card className="border-2 border-blue-500/20 bg-blue-500/5">
+                <Card>
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-blue-600">
-                      <TrendingUp className="h-5 w-5" />
-                      To Break Even
-                    </CardTitle>
+                    <CardTitle>Scenario Comparison</CardTitle>
+                    <CardDescription>Compare break-even points under different scenarios</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    {metrics.unitsNeeded > 0 ? (
+                    <div className="h-[300px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={scenarioData}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="name" />
+                          <YAxis label={{ value: "Units to Break Even", angle: -90, position: "insideLeft" }} />
+                          <Tooltip />
+                          <Bar dataKey="breakEven" fill="#ff6600" name="Break-Even Units" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                    <div className="mt-4 grid gap-4 md:grid-cols-3">
+                      {scenarioData.map((scenario, index) => (
+                        <div key={index} className="rounded-lg border border-border bg-muted/30 p-4">
+                          <p className="font-medium text-foreground">{scenario.name}</p>
+                          <p className="text-2xl font-bold text-orange-600">{scenario.breakEven} units</p>
+                          <p className="text-sm text-muted-foreground">
+                            Margin: {formatCurrency(scenario.contributionMargin)}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Chart */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Path to Profitability</CardTitle>
+                    <CardDescription>Revenue, costs, and profit at different sales volumes</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="h-[400px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={chartData}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="units" label={{ value: "Units Sold", position: "insideBottom", offset: -5 }} />
+                          <YAxis
+                            label={{
+                              value: `Amount (${CURRENCIES[currency].symbol})`,
+                              angle: -90,
+                              position: "insideLeft",
+                            }}
+                          />
+                          <Tooltip
+                            formatter={(value: number) => formatCurrency(value)}
+                            labelFormatter={(label) => `${label} units`}
+                          />
+                          <ReferenceLine y={0} stroke="#666" strokeDasharray="3 3" />
+                          <ReferenceLine
+                            x={metrics.breakEvenUnits}
+                            stroke="#ff6600"
+                            strokeDasharray="3 3"
+                            label="Break-Even"
+                          />
+                          <Line type="monotone" dataKey="revenue" stroke="#10b981" strokeWidth={2} name="Revenue" />
+                          <Line type="monotone" dataKey="cost" stroke="#ef4444" strokeWidth={2} name="Total Cost" />
+                          <Line type="monotone" dataKey="profit" stroke="#3b82f6" strokeWidth={2} name="Profit" />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Interactive Scenarios */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>What-If Scenarios</CardTitle>
+                    <CardDescription>
+                      Adjust these sliders to see how changes affect your break-even point
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <Label>Adjust Selling Price</Label>
+                        <span className="text-sm font-medium">
+                          {formatCurrency(Number.parseFloat(sellingPrice) + priceAdjustment)} (
+                          {priceAdjustment >= 0 ? "+" : ""}
+                          {formatCurrency(priceAdjustment)})
+                        </span>
+                      </div>
+                      <Slider
+                        value={[priceAdjustment]}
+                        onValueChange={(value) => setPriceAdjustment(value[0])}
+                        min={-5}
+                        max={5}
+                        step={0.5}
+                        className="w-full"
+                      />
+                    </div>
+
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <Label>Reduce Fixed Costs</Label>
+                        <span className="text-sm font-medium">
+                          {formatCurrency(Number.parseFloat(fixedCosts) * (1 - costReduction / 100))} (-{costReduction}
+                          %)
+                        </span>
+                      </div>
+                      <Slider
+                        value={[costReduction]}
+                        onValueChange={(value) => setCostReduction(value[0])}
+                        min={0}
+                        max={30}
+                        step={5}
+                        className="w-full"
+                      />
+                    </div>
+
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <Label>Reduce Variable Cost per Unit</Label>
+                        <span className="text-sm font-medium">
+                          {formatCurrency(Number.parseFloat(variableCost) * (1 - variableCostReduction / 100))} (-
+                          {variableCostReduction}%)
+                        </span>
+                      </div>
+                      <Slider
+                        value={[variableCostReduction]}
+                        onValueChange={(value) => setVariableCostReduction(value[0])}
+                        min={0}
+                        max={30}
+                        step={5}
+                        className="w-full"
+                      />
+                    </div>
+
+                    <Card className="border-orange-500/20 bg-orange-500/5">
+                      <CardContent className="pt-6">
+                        <div className="flex items-start gap-3">
+                          <Info className="h-5 w-5 text-orange-600 mt-0.5" />
+                          <div>
+                            <p className="font-medium text-foreground">Adjusted Break-Even Point</p>
+                            <p className="text-2xl font-bold text-orange-600">{metrics.breakEvenUnits} units/month</p>
+                            <p className="text-sm text-muted-foreground mt-1">
+                              With these adjustments, you would need {metrics.breakEvenUnits} units to break even
+                            </p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </CardContent>
+                </Card>
+
+                {/* Recommendations */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Personalized Recommendations</CardTitle>
+                    <CardDescription>Based on your {businessType} business metrics</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <Card className="border-blue-500/20 bg-blue-500/5">
+                      <CardContent className="pt-6">
+                        <div className="flex gap-3">
+                          <Info className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
+                          <div className="text-sm">
+                            <p className="font-medium text-foreground mb-2">Industry Benchmark</p>
+                            <p className="text-muted-foreground">
+                              Your contribution margin of {metrics.contributionMarginPercent}% is{" "}
+                              {Number.parseFloat(metrics.contributionMarginPercent) >= 40 ? "healthy and above" : "below"}{" "}
+                              the typical {businessType} industry range of 40-60%.
+                              {Number.parseFloat(metrics.contributionMarginPercent) < 40 &&
+                                " Consider ways to increase prices or reduce variable costs."}
+                            </p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {metrics.currentProfit < 0 ? (
                       <>
-                        <p className="text-3xl font-bold text-foreground">{metrics.unitsNeeded}</p>
-                        <p className="text-sm text-muted-foreground">more units (+{metrics.percentageIncrease}%)</p>
+                        <div className="flex gap-3">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 font-bold">
+                            1
+                          </div>
+                          <div>
+                            <p className="font-medium text-foreground">Increase Sales Volume</p>
+                            <p className="text-sm text-muted-foreground">
+                              You need {metrics.unitsNeeded} more units ({metrics.percentageIncrease}% increase) to reach
+                              break-even. Focus on marketing and customer acquisition.
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-3">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 font-bold">
+                            2
+                          </div>
+                          <div>
+                            <p className="font-medium text-foreground">Reduce Fixed Costs</p>
+                            <p className="text-sm text-muted-foreground">
+                              Reducing fixed costs by 10% would lower your break-even point to{" "}
+                              {Math.ceil((Number.parseFloat(fixedCosts) * 0.9) / metrics.contributionMargin)} units -
+                              that's{" "}
+                              {metrics.breakEvenUnits -
+                                Math.ceil((Number.parseFloat(fixedCosts) * 0.9) / metrics.contributionMargin)}{" "}
+                              fewer units needed.
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-3">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 font-bold">
+                            3
+                          </div>
+                          <div>
+                            <p className="font-medium text-foreground">Optimize Pricing</p>
+                            <p className="text-sm text-muted-foreground">
+                              Increasing your price by just {formatCurrency(1)} would lower your break-even point to{" "}
+                              {Math.ceil(Number.parseFloat(fixedCosts) / (metrics.contributionMargin + 1))} units. Test if
+                              your market can support a small price increase.
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-3">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 font-bold">
+                            4
+                          </div>
+                          <div>
+                            <p className="font-medium text-foreground">Lower Variable Costs</p>
+                            <p className="text-sm text-muted-foreground">
+                              Negotiate with suppliers or find ways to reduce your cost per unit. Every{" "}
+                              {formatCurrency(0.5)} reduction in variable costs significantly improves your margins.
+                            </p>
+                          </div>
+                        </div>
                       </>
                     ) : (
                       <>
-                        <p className="text-2xl font-bold text-green-600">Profitable!</p>
-                        <p className="text-sm text-muted-foreground">Keep growing</p>
+                        <div className="flex gap-3">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-500/10 text-green-600 font-bold">
+                            ✓
+                          </div>
+                          <div>
+                            <p className="font-medium text-foreground">You're Profitable!</p>
+                            <p className="text-sm text-muted-foreground">
+                              Great job! You're making {formatCurrency(metrics.currentProfit)} per month. Focus on scaling
+                              your successful business model.
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-3">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 font-bold">
+                            1
+                          </div>
+                          <div>
+                            <p className="font-medium text-foreground">Scale Your Success</p>
+                            <p className="text-sm text-muted-foreground">
+                              Consider reinvesting profits into marketing to increase sales volume and grow your business
+                              further.
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-3">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 font-bold">
+                            2
+                          </div>
+                          <div>
+                            <p className="font-medium text-foreground">Monitor Your Margins</p>
+                            <p className="text-sm text-muted-foreground">
+                              Keep a close eye on your costs to maintain healthy profit margins as you grow.
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-3">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 font-bold">
+                            3
+                          </div>
+                          <div>
+                            <p className="font-medium text-foreground">Automate and Optimize</p>
+                            <p className="text-sm text-muted-foreground">
+                              Look for opportunities to automate processes and improve efficiency to increase
+                              profitability.
+                            </p>
+                          </div>
+                        </div>
                       </>
                     )}
                   </CardContent>
                 </Card>
 
-                <Card className="border-2 border-purple-500/20 bg-purple-500/5">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-purple-600">
-                      <BarChart3 className="h-5 w-5" />
-                      Margin
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-3xl font-bold text-foreground">{metrics.contributionMarginPercent}%</p>
-                    <p className="text-sm text-muted-foreground">{formatCurrency(metrics.contributionMargin)}/unit</p>
-                  </CardContent>
-                </Card>
-              </div>
+                {/* Actions */}
+                <div className="flex flex-col gap-4 sm:flex-row sm:justify-between">
+                  <Button variant="outline" onClick={() => setStep("input")}>
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Recalculate
+                  </Button>
+                  <Button onClick={generatePDF} disabled={isGeneratingPDF}>
+                    <Download className="mr-2 h-4 w-4" />
+                    {isGeneratingPDF ? "Generating PDF..." : "Download Full Report"}
+                  </Button>
+                </div>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Calendar className="h-5 w-5" />
-                    12-Month Cash Flow Projection
-                  </CardTitle>
-                  <CardDescription>
-                    Projected revenue, costs, and cumulative profit (assuming 5% monthly growth)
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-[400px] w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <AreaChart data={cashFlowData}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="month" />
-                        <YAxis />
-                        <Tooltip
-                          formatter={(value: number) => formatCurrency(value)}
-                          labelFormatter={(label) => label}
-                        />
-                        <Legend />
-                        <Area
-                          type="monotone"
-                          dataKey="revenue"
-                          stackId="1"
-                          stroke="#10b981"
-                          fill="#10b981"
-                          fillOpacity={0.6}
-                          name="Revenue"
-                        />
-                        <Area
-                          type="monotone"
-                          dataKey="cost"
-                          stackId="2"
-                          stroke="#ef4444"
-                          fill="#ef4444"
-                          fillOpacity={0.6}
-                          name="Costs"
-                        />
-                        <Line
-                          type="monotone"
-                          dataKey="cumulative"
-                          stroke="#ff6600"
-                          strokeWidth={3}
-                          name="Cumulative Profit"
-                        />
-                      </AreaChart>
-                    </ResponsiveContainer>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Scenario Comparison</CardTitle>
-                  <CardDescription>Compare break-even points under different scenarios</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-[300px] w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={scenarioData}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
-                        <YAxis label={{ value: "Units to Break Even", angle: -90, position: "insideLeft" }} />
-                        <Tooltip />
-                        <Bar dataKey="breakEven" fill="#ff6600" name="Break-Even Units" />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                  <div className="mt-4 grid gap-4 md:grid-cols-3">
-                    {scenarioData.map((scenario, index) => (
-                      <div key={index} className="rounded-lg border border-border bg-muted/30 p-4">
-                        <p className="font-medium text-foreground">{scenario.name}</p>
-                        <p className="text-2xl font-bold text-orange-600">{scenario.breakEven} units</p>
-                        <p className="text-sm text-muted-foreground">
-                          Margin: {formatCurrency(scenario.contributionMargin)}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Chart */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Path to Profitability</CardTitle>
-                  <CardDescription>Revenue, costs, and profit at different sales volumes</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-[400px] w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={chartData}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="units" label={{ value: "Units Sold", position: "insideBottom", offset: -5 }} />
-                        <YAxis
-                          label={{
-                            value: `Amount (${CURRENCIES[currency].symbol})`,
-                            angle: -90,
-                            position: "insideLeft",
-                          }}
-                        />
-                        <Tooltip
-                          formatter={(value: number) => formatCurrency(value)}
-                          labelFormatter={(label) => `${label} units`}
-                        />
-                        <ReferenceLine y={0} stroke="#666" strokeDasharray="3 3" />
-                        <ReferenceLine
-                          x={metrics.breakEvenUnits}
-                          stroke="#ff6600"
-                          strokeDasharray="3 3"
-                          label="Break-Even"
-                        />
-                        <Line type="monotone" dataKey="revenue" stroke="#10b981" strokeWidth={2} name="Revenue" />
-                        <Line type="monotone" dataKey="cost" stroke="#ef4444" strokeWidth={2} name="Total Cost" />
-                        <Line type="monotone" dataKey="profit" stroke="#3b82f6" strokeWidth={2} name="Profit" />
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Interactive Scenarios */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>What-If Scenarios</CardTitle>
-                  <CardDescription>
-                    Adjust these sliders to see how changes affect your break-even point
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <Label>Adjust Selling Price</Label>
-                      <span className="text-sm font-medium">
-                        {formatCurrency(Number.parseFloat(sellingPrice) + priceAdjustment)} (
-                        {priceAdjustment >= 0 ? "+" : ""}
-                        {formatCurrency(priceAdjustment)})
-                      </span>
-                    </div>
-                    <Slider
-                      value={[priceAdjustment]}
-                      onValueChange={(value) => setPriceAdjustment(value[0])}
-                      min={-5}
-                      max={5}
-                      step={0.5}
-                      className="w-full"
-                    />
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <Label>Reduce Fixed Costs</Label>
-                      <span className="text-sm font-medium">
-                        {formatCurrency(Number.parseFloat(fixedCosts) * (1 - costReduction / 100))} (-{costReduction}
-                        %)
-                      </span>
-                    </div>
-                    <Slider
-                      value={[costReduction]}
-                      onValueChange={(value) => setCostReduction(value[0])}
-                      min={0}
-                      max={30}
-                      step={5}
-                      className="w-full"
-                    />
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <Label>Reduce Variable Cost per Unit</Label>
-                      <span className="text-sm font-medium">
-                        {formatCurrency(Number.parseFloat(variableCost) * (1 - variableCostReduction / 100))} (-
-                        {variableCostReduction}%)
-                      </span>
-                    </div>
-                    <Slider
-                      value={[variableCostReduction]}
-                      onValueChange={(value) => setVariableCostReduction(value[0])}
-                      min={0}
-                      max={30}
-                      step={5}
-                      className="w-full"
-                    />
-                  </div>
-
-                  <Card className="border-orange-500/20 bg-orange-500/5">
-                    <CardContent className="pt-6">
-                      <div className="flex items-start gap-3">
-                        <Info className="h-5 w-5 text-orange-600 mt-0.5" />
-                        <div>
-                          <p className="font-medium text-foreground">Adjusted Break-Even Point</p>
-                          <p className="text-2xl font-bold text-orange-600">{metrics.breakEvenUnits} units/month</p>
-                          <p className="text-sm text-muted-foreground mt-1">
-                            With these adjustments, you would need {metrics.breakEvenUnits} units to break even
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </CardContent>
-              </Card>
-
-              {/* Recommendations */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Personalized Recommendations</CardTitle>
-                  <CardDescription>Based on your {businessType} business metrics</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <Card className="border-blue-500/20 bg-blue-500/5">
-                    <CardContent className="pt-6">
-                      <div className="flex gap-3">
-                        <Info className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
-                        <div className="text-sm">
-                          <p className="font-medium text-foreground mb-2">Industry Benchmark</p>
-                          <p className="text-muted-foreground">
-                            Your contribution margin of {metrics.contributionMarginPercent}% is{" "}
-                            {Number.parseFloat(metrics.contributionMarginPercent) >= 40 ? "healthy and above" : "below"}{" "}
-                            the typical {businessType} industry range of 40-60%.
-                            {Number.parseFloat(metrics.contributionMarginPercent) < 40 &&
-                              " Consider ways to increase prices or reduce variable costs."}
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  {metrics.currentProfit < 0 ? (
-                    <>
-                      <div className="flex gap-3">
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 font-bold">
-                          1
-                        </div>
-                        <div>
-                          <p className="font-medium text-foreground">Increase Sales Volume</p>
-                          <p className="text-sm text-muted-foreground">
-                            You need {metrics.unitsNeeded} more units ({metrics.percentageIncrease}% increase) to reach
-                            break-even. Focus on marketing and customer acquisition.
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex gap-3">
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 font-bold">
-                          2
-                        </div>
-                        <div>
-                          <p className="font-medium text-foreground">Reduce Fixed Costs</p>
-                          <p className="text-sm text-muted-foreground">
-                            Reducing fixed costs by 10% would lower your break-even point to{" "}
-                            {Math.ceil((Number.parseFloat(fixedCosts) * 0.9) / metrics.contributionMargin)} units -
-                            that's{" "}
-                            {metrics.breakEvenUnits -
-                              Math.ceil((Number.parseFloat(fixedCosts) * 0.9) / metrics.contributionMargin)}{" "}
-                            fewer units needed.
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex gap-3">
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 font-bold">
-                          3
-                        </div>
-                        <div>
-                          <p className="font-medium text-foreground">Optimize Pricing</p>
-                          <p className="text-sm text-muted-foreground">
-                            Increasing your price by just {formatCurrency(1)} would lower your break-even point to{" "}
-                            {Math.ceil(Number.parseFloat(fixedCosts) / (metrics.contributionMargin + 1))} units. Test if
-                            your market can support a small price increase.
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex gap-3">
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 font-bold">
-                          4
-                        </div>
-                        <div>
-                          <p className="font-medium text-foreground">Lower Variable Costs</p>
-                          <p className="text-sm text-muted-foreground">
-                            Negotiate with suppliers or find ways to reduce your cost per unit. Every{" "}
-                            {formatCurrency(0.5)} reduction in variable costs significantly improves your margins.
-                          </p>
-                        </div>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="flex gap-3">
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-500/10 text-green-600 font-bold">
-                          ✓
-                        </div>
-                        <div>
-                          <p className="font-medium text-foreground">You're Profitable!</p>
-                          <p className="text-sm text-muted-foreground">
-                            Great job! You're making {formatCurrency(metrics.currentProfit)} per month. Focus on scaling
-                            your successful business model.
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex gap-3">
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 font-bold">
-                          1
-                        </div>
-                        <div>
-                          <p className="font-medium text-foreground">Scale Your Success</p>
-                          <p className="text-sm text-muted-foreground">
-                            Consider reinvesting profits into marketing to increase sales volume and grow your business
-                            further.
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex gap-3">
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 font-bold">
-                          2
-                        </div>
-                        <div>
-                          <p className="font-medium text-foreground">Monitor Your Margins</p>
-                          <p className="text-sm text-muted-foreground">
-                            Keep a close eye on your costs to maintain healthy profit margins as you grow.
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex gap-3">
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 font-bold">
-                          3
-                        </div>
-                        <div>
-                          <p className="font-medium text-foreground">Automate and Optimize</p>
-                          <p className="text-sm text-muted-foreground">
-                            Look for opportunities to automate processes and improve efficiency to increase
-                            profitability.
-                          </p>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Actions */}
-              <div className="flex flex-col gap-4 sm:flex-row sm:justify-between">
-                <Button variant="outline" onClick={() => setStep("input")}>
-                  <ArrowLeft className="mr-2 h-4 w-4" />
-                  Recalculate
-                </Button>
-                <Button onClick={generatePDF} disabled={isGeneratingPDF}>
-                  <Download className="mr-2 h-4 w-4" />
-                  {isGeneratingPDF ? "Generating PDF..." : "Download Full Report"}
-                </Button>
-              </div>
-
-              {/* CTA */}
-              <Card className="border-2 border-primary/20 bg-primary/5">
-                <CardContent className="pt-6">
-                  <div className="text-center">
+                {/* CTA */}
+                <div className="relative rounded-3xl overflow-hidden border border-primary/20 bg-gradient-to-br from-card via-card to-primary/5">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-primary/8 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4 pointer-events-none" />
+                  <div className="relative p-8 sm:p-10 text-center">
                     <h3 className="mb-2 text-xl font-bold text-foreground">Want Help Reaching Your Goals?</h3>
-                    <p className="mb-4 text-muted-foreground">
-                      Our tools show you the numbers. Our services help you achieve them. Let's grow your business
+                    <p className="mb-6 text-muted-foreground">
+                      Our tools show you the numbers. Our services help you achieve them. Let&apos;s grow your business
                       together.
                     </p>
                     <Link href="/contact">
-                      <Button size="lg">
+                      <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] group">
                         Get Started
-                        <TrendingUp className="ml-2 h-4 w-4" />
+                        <TrendingUp className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                       </Button>
                     </Link>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </section>
+        </main>
         <Footer />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+    <div className="flex min-h-screen flex-col">
       <Header />
-      <div className="py-12">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-8">
-            <Link href="/tools">
-              <Button variant="ghost" size="sm">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Tools
-              </Button>
-            </Link>
+      <main className="flex-1">
+        <section className="relative overflow-hidden py-14 sm:py-18 md:py-24">
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-16 right-16 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
+            <div className="absolute bottom-10 left-20 w-64 h-64 bg-primary/3 rounded-full blur-3xl" />
+            <div
+              className="absolute inset-0 opacity-[0.02]"
+              style={{
+                backgroundImage: `radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)`,
+                backgroundSize: "40px 40px",
+              }}
+            />
           </div>
-
-          <div className="mx-auto max-w-3xl">
-            <div className="mb-8 text-center">
-              <div className="mb-4 inline-flex rounded-full bg-orange-500/10 p-3">
-                <TrendingUp className="h-8 w-8 text-orange-600" />
-              </div>
-              <h1 className="mb-4 text-4xl font-bold text-foreground">Break-Even Calculator</h1>
-              <p className="text-lg text-muted-foreground">
-                Discover when your business will be profitable with 12-month projections and scenario analysis
-              </p>
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div className="mb-6">
+              <Link href="/tools">
+                <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back to Tools
+                </Button>
+              </Link>
             </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Enter Your Business Details</CardTitle>
-                <CardDescription>
-                  Provide your basic business metrics to calculate your break-even point
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="currency">Currency</Label>
-                  <Select value={currency} onValueChange={(value) => setCurrency(value as keyof typeof CURRENCIES)}>
-                    <SelectTrigger id="currency">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Object.entries(CURRENCIES).map(([code, { symbol, name }]) => (
-                        <SelectItem key={code} value={code}>
-                          {symbol} - {name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+            <div className="mx-auto max-w-3xl">
+              <div className="mb-8 text-center">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-600 text-sm font-medium mb-6">
+                  <TrendingUp className="h-3.5 w-3.5" />
+                  Free Business Tool
                 </div>
+                <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground mb-4">
+                  Break-Even <span className="text-primary">Calculator</span>
+                </h1>
+                <p className="text-lg text-muted-foreground">
+                  Discover when your business will be profitable with 12-month projections and scenario analysis
+                </p>
+              </div>
 
-                {/* Business Info */}
-                <div className="space-y-4 rounded-lg border border-border bg-muted/30 p-4">
-                  <h3 className="font-medium text-foreground">Your Information</h3>
+              <Card className="border-border/50 bg-card/80 backdrop-blur-sm shadow-xl shadow-black/5">
+                <CardHeader>
+                  <CardTitle>Enter Your Business Details</CardTitle>
+                  <CardDescription>
+                    Provide your basic business metrics to calculate your break-even point
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
                   <div className="space-y-2">
-                    <Label htmlFor="businessName">Business Name *</Label>
-                    <Input
-                      id="businessName"
-                      placeholder="e.g., Joe's Coffee Shop"
-                      value={businessName}
-                      onChange={(e) => setBusinessName(e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email Address *</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="your@email.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="businessType">Business Type</Label>
-                    <Select value={businessType} onValueChange={setBusinessType}>
-                      <SelectTrigger id="businessType">
+                    <Label htmlFor="currency">Currency</Label>
+                    <Select value={currency} onValueChange={(value) => setCurrency(value as keyof typeof CURRENCIES)}>
+                      <SelectTrigger id="currency">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="retail">Retail Store</SelectItem>
-                        <SelectItem value="cafe">Cafe/Restaurant</SelectItem>
-                        <SelectItem value="service">Service Business</SelectItem>
-                        <SelectItem value="ecommerce">E-commerce</SelectItem>
-                        <SelectItem value="manufacturing">Manufacturing</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
+                        {Object.entries(CURRENCIES).map(([code, { symbol, name }]) => (
+                          <SelectItem key={code} value={code}>
+                            {symbol} - {name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
-                </div>
 
-                {/* Fixed Costs */}
-                <div className="space-y-2">
-                  <Label htmlFor="fixedCosts" className="flex items-center gap-2">
-                    Monthly Fixed Costs
-                    <span className="text-xs text-muted-foreground">(rent, salaries, insurance, etc.)</span>
-                  </Label>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                      {CURRENCIES[currency].symbol}
-                    </span>
-                    <Input
-                      id="fixedCosts"
-                      type="number"
-                      placeholder="5000"
-                      value={fixedCosts}
-                      onChange={(e) => setFixedCosts(e.target.value)}
-                      className="pl-7"
-                    />
-                  </div>
-                </div>
-
-                {/* Variable Cost */}
-                <div className="space-y-2">
-                  <Label htmlFor="variableCost" className="flex items-center gap-2">
-                    Variable Cost per Unit
-                    <span className="text-xs text-muted-foreground">(materials, product cost, etc.)</span>
-                  </Label>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                      {CURRENCIES[currency].symbol}
-                    </span>
-                    <Input
-                      id="variableCost"
-                      type="number"
-                      placeholder="3"
-                      value={variableCost}
-                      onChange={(e) => setVariableCost(e.target.value)}
-                      className="pl-7"
-                      step="0.01"
-                    />
-                  </div>
-                </div>
-
-                {/* Selling Price */}
-                <div className="space-y-2">
-                  <Label htmlFor="sellingPrice" className="flex items-center gap-2">
-                    Selling Price per Unit
-                    <span className="text-xs text-muted-foreground">(what customers pay)</span>
-                  </Label>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                      {CURRENCIES[currency].symbol}
-                    </span>
-                    <Input
-                      id="sellingPrice"
-                      type="number"
-                      placeholder="10"
-                      value={sellingPrice}
-                      onChange={(e) => setSellingPrice(e.target.value)}
-                      className="pl-7"
-                      step="0.01"
-                    />
-                  </div>
-                </div>
-
-                {/* Current Sales */}
-                <div className="space-y-2">
-                  <Label htmlFor="currentSales" className="flex items-center gap-2">
-                    Current Monthly Sales
-                    <span className="text-xs text-muted-foreground">(units sold per month)</span>
-                  </Label>
-                  <Input
-                    id="currentSales"
-                    type="number"
-                    placeholder="400"
-                    value={currentSales}
-                    onChange={(e) => setCurrentSales(e.target.value)}
-                  />
-                </div>
-
-                {/* Info Box */}
-                <Card className="border-blue-500/20 bg-blue-500/5">
-                  <CardContent className="pt-6">
-                    <div className="flex gap-3">
-                      <AlertCircle className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
-                      <div className="text-sm text-muted-foreground">
-                        <p className="font-medium text-foreground mb-1">Premium Analysis Includes:</p>
-                        <ul className="space-y-1 list-disc list-inside">
-                          <li>12-month cash flow projections</li>
-                          <li>Scenario comparison analysis</li>
-                          <li>Industry benchmark comparisons</li>
-                          <li>Interactive what-if scenarios</li>
-                          <li>Personalized recommendations</li>
-                        </ul>
-                      </div>
+                  {/* Business Info */}
+                  <div className="space-y-4 rounded-lg border border-border bg-muted/30 p-4">
+                    <h3 className="font-medium text-foreground">Your Information</h3>
+                    <div className="space-y-2">
+                      <Label htmlFor="businessName">Business Name *</Label>
+                      <Input
+                        id="businessName"
+                        placeholder="e.g., Joe's Coffee Shop"
+                        value={businessName}
+                        onChange={(e) => setBusinessName(e.target.value)}
+                      />
                     </div>
-                  </CardContent>
-                </Card>
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email Address *</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="your@email.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="businessType">Business Type</Label>
+                      <Select value={businessType} onValueChange={setBusinessType}>
+                        <SelectTrigger id="businessType">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="retail">Retail Store</SelectItem>
+                          <SelectItem value="cafe">Cafe/Restaurant</SelectItem>
+                          <SelectItem value="service">Service Business</SelectItem>
+                          <SelectItem value="ecommerce">E-commerce</SelectItem>
+                          <SelectItem value="manufacturing">Manufacturing</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
 
-                <Button onClick={handleCalculate} size="lg" className="w-full">
-                  Calculate My Break-Even Point
-                  <TrendingUp className="ml-2 h-5 w-5" />
-                </Button>
-              </CardContent>
-            </Card>
+                  {/* Fixed Costs */}
+                  <div className="space-y-2">
+                    <Label htmlFor="fixedCosts" className="flex items-center gap-2">
+                      Monthly Fixed Costs
+                      <span className="text-xs text-muted-foreground">(rent, salaries, insurance, etc.)</span>
+                    </Label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                        {CURRENCIES[currency].symbol}
+                      </span>
+                      <Input
+                        id="fixedCosts"
+                        type="number"
+                        placeholder="5000"
+                        value={fixedCosts}
+                        onChange={(e) => setFixedCosts(e.target.value)}
+                        className="pl-7"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Variable Cost */}
+                  <div className="space-y-2">
+                    <Label htmlFor="variableCost" className="flex items-center gap-2">
+                      Variable Cost per Unit
+                      <span className="text-xs text-muted-foreground">(materials, product cost, etc.)</span>
+                    </Label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                        {CURRENCIES[currency].symbol}
+                      </span>
+                      <Input
+                        id="variableCost"
+                        type="number"
+                        placeholder="3"
+                        value={variableCost}
+                        onChange={(e) => setVariableCost(e.target.value)}
+                        className="pl-7"
+                        step="0.01"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Selling Price */}
+                  <div className="space-y-2">
+                    <Label htmlFor="sellingPrice" className="flex items-center gap-2">
+                      Selling Price per Unit
+                      <span className="text-xs text-muted-foreground">(what customers pay)</span>
+                    </Label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                        {CURRENCIES[currency].symbol}
+                      </span>
+                      <Input
+                        id="sellingPrice"
+                        type="number"
+                        placeholder="10"
+                        value={sellingPrice}
+                        onChange={(e) => setSellingPrice(e.target.value)}
+                        className="pl-7"
+                        step="0.01"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Current Sales */}
+                  <div className="space-y-2">
+                    <Label htmlFor="currentSales" className="flex items-center gap-2">
+                      Current Monthly Sales
+                      <span className="text-xs text-muted-foreground">(units sold per month)</span>
+                    </Label>
+                    <Input
+                      id="currentSales"
+                      type="number"
+                      placeholder="400"
+                      value={currentSales}
+                      onChange={(e) => setCurrentSales(e.target.value)}
+                    />
+                  </div>
+
+                  {/* Info Box */}
+                  <Card className="border-blue-500/20 bg-blue-500/5">
+                    <CardContent className="pt-6">
+                      <div className="flex gap-3">
+                        <AlertCircle className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
+                        <div className="text-sm text-muted-foreground">
+                          <p className="font-medium text-foreground mb-1">Premium Analysis Includes:</p>
+                          <ul className="space-y-1 list-disc list-inside">
+                            <li>12-month cash flow projections</li>
+                            <li>Scenario comparison analysis</li>
+                            <li>Industry benchmark comparisons</li>
+                            <li>Interactive what-if scenarios</li>
+                            <li>Personalized recommendations</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Button onClick={handleCalculate} size="lg" className="w-full">
+                    Calculate My Break-Even Point
+                    <TrendingUp className="ml-2 h-5 w-5" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
       <Footer />
     </div>
   )

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
+import { Cookie } from "lucide-react"
 
 export function CookieBanner() {
   const [showBanner, setShowBanner] = useState(false)
@@ -9,7 +10,8 @@ export function CookieBanner() {
   useEffect(() => {
     const consent = localStorage.getItem("cookie-consent")
     if (!consent) {
-      setShowBanner(true)
+      const timer = setTimeout(() => setShowBanner(true), 1000)
+      return () => clearTimeout(timer)
     }
   }, [])
 
@@ -26,27 +28,39 @@ export function CookieBanner() {
   if (!showBanner) return null
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 animate-in slide-in-from-bottom-4 duration-500">
-      <div className="border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
-            <div className="flex-1">
-              <p className="text-sm text-muted-foreground">
-                We use cookies to enhance your browsing experience and analyze our traffic. By clicking "Accept", you
-                consent to our use of cookies.{" "}
-                <a href="/privacy" className="text-primary underline-offset-4 hover:underline">
+    <div className="fixed bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-auto sm:max-w-md z-50 animate-in slide-in-from-bottom duration-500">
+      <div className="rounded-2xl border border-border/80 bg-card/95 backdrop-blur-xl shadow-2xl shadow-black/5">
+        <div className="p-5 sm:p-6">
+          <div className="flex items-start gap-3 mb-4">
+            <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+              <Cookie className="h-4 w-4 text-primary" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-foreground mb-1">Cookie Preferences</p>
+              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                We use cookies to enhance your browsing experience and analyze our traffic.{" "}
+                <a href="/privacy" className="text-primary hover:underline underline-offset-4">
                   Learn more
                 </a>
               </p>
             </div>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={declineCookies}>
-                Decline
-              </Button>
-              <Button size="sm" onClick={acceptCookies}>
-                Accept
-              </Button>
-            </div>
+          </div>
+          <div className="flex gap-2 justify-end">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={declineCookies}
+              className="text-xs px-4 hover:bg-muted/50"
+            >
+              Decline
+            </Button>
+            <Button
+              size="sm"
+              onClick={acceptCookies}
+              className="text-xs px-4 bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm"
+            >
+              Accept All
+            </Button>
           </div>
         </div>
       </div>

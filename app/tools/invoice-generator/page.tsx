@@ -165,250 +165,269 @@ export default function InvoiceGeneratorPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex min-h-screen flex-col">
       <Header />
-      <div className="py-12">
-        <div className="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-8 text-center">
-            <h1 className="mb-4 text-4xl font-bold text-foreground">Invoice Generator</h1>
-            <p className="text-lg text-muted-foreground">Create professional invoices in minutes</p>
+      <main className="flex-1">
+        <section className="relative overflow-hidden py-14 sm:py-18 md:py-24">
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-16 left-16 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
+            <div className="absolute bottom-10 right-20 w-64 h-64 bg-primary/3 rounded-full blur-3xl" />
+            <div
+              className="absolute inset-0 opacity-[0.02]"
+              style={{
+                backgroundImage: `radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)`,
+                backgroundSize: "40px 40px",
+              }}
+            />
           </div>
+          <div className="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 relative">
+            <div className="mb-10 text-center">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-600 text-sm font-medium mb-6">
+                <Download className="h-3.5 w-3.5" />
+                Free Business Tool
+              </div>
+              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground mb-4">
+                Invoice <span className="text-primary">Generator</span>
+              </h1>
+              <p className="text-lg text-muted-foreground">Create professional invoices in minutes</p>
+            </div>
 
-          <div className="grid gap-8 lg:grid-cols-2">
-            {/* Form Section */}
-            <div className="space-y-6">
-              {/* Business Info */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Your Business Information</CardTitle>
-                  <CardDescription>This will appear on the invoice</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <Label htmlFor="businessName">Business Name</Label>
-                    <Input
-                      id="businessName"
-                      value={businessName}
-                      onChange={(e) => setBusinessName(e.target.value)}
-                      placeholder="Your Business Name"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="businessAddress">Address</Label>
-                    <Input
-                      id="businessAddress"
-                      value={businessAddress}
-                      onChange={(e) => setBusinessAddress(e.target.value)}
-                      placeholder="123 Business St, City, Country"
-                    />
-                  </div>
-                  <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-8 lg:grid-cols-2">
+              {/* Form Section */}
+              <div className="space-y-6">
+                {/* Business Info */}
+                <Card className="border-border/50 bg-card/80 backdrop-blur-sm shadow-lg shadow-black/5">
+                  <CardHeader>
+                    <CardTitle>Your Business Information</CardTitle>
+                    <CardDescription>This will appear on the invoice</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
                     <div>
-                      <Label htmlFor="businessEmail">Email</Label>
+                      <Label htmlFor="businessName">Business Name</Label>
                       <Input
-                        id="businessEmail"
+                        id="businessName"
+                        value={businessName}
+                        onChange={(e) => setBusinessName(e.target.value)}
+                        placeholder="Your Business Name"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="businessAddress">Address</Label>
+                      <Input
+                        id="businessAddress"
+                        value={businessAddress}
+                        onChange={(e) => setBusinessAddress(e.target.value)}
+                        placeholder="123 Business St, City, Country"
+                      />
+                    </div>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <Label htmlFor="businessEmail">Email</Label>
+                        <Input
+                          id="businessEmail"
+                          type="email"
+                          value={businessEmail}
+                          onChange={(e) => setBusinessEmail(e.target.value)}
+                          placeholder="email@business.com"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="businessPhone">Phone</Label>
+                        <Input
+                          id="businessPhone"
+                          value={businessPhone}
+                          onChange={(e) => setBusinessPhone(e.target.value)}
+                          placeholder="+1 234 567 8900"
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Client Info */}
+                <Card className="border-border/50 bg-card/80 backdrop-blur-sm shadow-lg shadow-black/5">
+                  <CardHeader>
+                    <CardTitle>Client Information</CardTitle>
+                    <CardDescription>Who are you invoicing?</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <Label htmlFor="clientName">Client Name</Label>
+                      <Input
+                        id="clientName"
+                        value={clientName}
+                        onChange={(e) => setClientName(e.target.value)}
+                        placeholder="Client Name"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="clientEmail">Client Email</Label>
+                      <Input
+                        id="clientEmail"
                         type="email"
-                        value={businessEmail}
-                        onChange={(e) => setBusinessEmail(e.target.value)}
-                        placeholder="email@business.com"
+                        value={clientEmail}
+                        onChange={(e) => setClientEmail(e.target.value)}
+                        placeholder="client@email.com"
                       />
                     </div>
                     <div>
-                      <Label htmlFor="businessPhone">Phone</Label>
+                      <Label htmlFor="clientAddress">Client Address</Label>
                       <Input
-                        id="businessPhone"
-                        value={businessPhone}
-                        onChange={(e) => setBusinessPhone(e.target.value)}
-                        placeholder="+1 234 567 8900"
+                        id="clientAddress"
+                        value={clientAddress}
+                        onChange={(e) => setClientAddress(e.target.value)}
+                        placeholder="Client Address"
                       />
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
 
-              {/* Client Info */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Client Information</CardTitle>
-                  <CardDescription>Who are you invoicing?</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <Label htmlFor="clientName">Client Name</Label>
-                    <Input
-                      id="clientName"
-                      value={clientName}
-                      onChange={(e) => setClientName(e.target.value)}
-                      placeholder="Client Name"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="clientEmail">Client Email</Label>
-                    <Input
-                      id="clientEmail"
-                      type="email"
-                      value={clientEmail}
-                      onChange={(e) => setClientEmail(e.target.value)}
-                      placeholder="client@email.com"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="clientAddress">Client Address</Label>
-                    <Input
-                      id="clientAddress"
-                      value={clientAddress}
-                      onChange={(e) => setClientAddress(e.target.value)}
-                      placeholder="Client Address"
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Invoice Details */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Invoice Details</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div>
-                      <Label htmlFor="invoiceNumber">Invoice Number</Label>
-                      <Input
-                        id="invoiceNumber"
-                        value={invoiceNumber}
-                        onChange={(e) => setInvoiceNumber(e.target.value)}
-                        placeholder="INV-001"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="taxRate">Tax Rate (%)</Label>
-                      <Input
-                        id="taxRate"
-                        type="number"
-                        value={taxRate}
-                        onChange={(e) => setTaxRate(Number(e.target.value))}
-                        placeholder="0"
-                      />
-                    </div>
-                  </div>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div>
-                      <Label htmlFor="invoiceDate">Invoice Date</Label>
-                      <Input
-                        id="invoiceDate"
-                        type="date"
-                        value={invoiceDate}
-                        onChange={(e) => setInvoiceDate(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="dueDate">Due Date</Label>
-                      <Input id="dueDate" type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Line Items & Preview */}
-            <div className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Line Items</CardTitle>
-                  <CardDescription>Add products or services</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {lineItems.map((item, index) => (
-                    <div key={index} className="space-y-2 rounded-lg border border-border p-4">
-                      <div className="flex items-center justify-between">
-                        <Label>Item {index + 1}</Label>
-                        {lineItems.length > 1 && (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => removeLineItem(index)}
-                            className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        )}
-                      </div>
-                      <Input
-                        value={item.description}
-                        onChange={(e) => updateLineItem(index, "description", e.target.value)}
-                        placeholder="Description"
-                      />
-                      <div className="grid grid-cols-2 gap-2">
+                {/* Invoice Details */}
+                <Card className="border-border/50 bg-card/80 backdrop-blur-sm shadow-lg shadow-black/5">
+                  <CardHeader>
+                    <CardTitle>Invoice Details</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <Label htmlFor="invoiceNumber">Invoice Number</Label>
                         <Input
-                          type="number"
-                          value={item.quantity}
-                          onChange={(e) => updateLineItem(index, "quantity", Number(e.target.value))}
-                          placeholder="Qty"
-                        />
-                        <Input
-                          type="number"
-                          value={item.price}
-                          onChange={(e) => updateLineItem(index, "price", Number(e.target.value))}
-                          placeholder="Price"
+                          id="invoiceNumber"
+                          value={invoiceNumber}
+                          onChange={(e) => setInvoiceNumber(e.target.value)}
+                          placeholder="INV-001"
                         />
                       </div>
-                      <div className="text-right text-sm font-medium">
-                        Amount: ${(item.quantity * item.price).toFixed(2)}
+                      <div>
+                        <Label htmlFor="taxRate">Tax Rate (%)</Label>
+                        <Input
+                          id="taxRate"
+                          type="number"
+                          value={taxRate}
+                          onChange={(e) => setTaxRate(Number(e.target.value))}
+                          placeholder="0"
+                        />
                       </div>
                     </div>
-                  ))}
-                  <Button onClick={addLineItem} variant="outline" className="w-full bg-transparent">
-                    <Plus className="mr-2 h-4 w-4" />
-                    Add Line Item
-                  </Button>
-                </CardContent>
-              </Card>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <Label htmlFor="invoiceDate">Invoice Date</Label>
+                        <Input
+                          id="invoiceDate"
+                          type="date"
+                          value={invoiceDate}
+                          onChange={(e) => setInvoiceDate(e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="dueDate">Due Date</Label>
+                        <Input id="dueDate" type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
 
-              {/* Totals */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Invoice Total</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Subtotal:</span>
-                    <span className="font-medium">${subtotal.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Tax ({taxRate}%):</span>
-                    <span className="font-medium">${tax.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between border-t border-border pt-2 text-lg font-bold">
-                    <span>Total:</span>
-                    <span className="text-primary">${total.toFixed(2)}</span>
-                  </div>
-                </CardContent>
-              </Card>
+              {/* Line Items & Preview */}
+              <div className="space-y-6">
+                <Card className="border-border/50 bg-card/80 backdrop-blur-sm shadow-lg shadow-black/5">
+                  <CardHeader>
+                    <CardTitle>Line Items</CardTitle>
+                    <CardDescription>Add products or services</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {lineItems.map((item, index) => (
+                      <div key={index} className="space-y-2 rounded-lg border border-border p-4">
+                        <div className="flex items-center justify-between">
+                          <Label>Item {index + 1}</Label>
+                          {lineItems.length > 1 && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => removeLineItem(index)}
+                              className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          )}
+                        </div>
+                        <Input
+                          value={item.description}
+                          onChange={(e) => updateLineItem(index, "description", e.target.value)}
+                          placeholder="Description"
+                        />
+                        <div className="grid grid-cols-2 gap-2">
+                          <Input
+                            type="number"
+                            value={item.quantity}
+                            onChange={(e) => updateLineItem(index, "quantity", Number(e.target.value))}
+                            placeholder="Qty"
+                          />
+                          <Input
+                            type="number"
+                            value={item.price}
+                            onChange={(e) => updateLineItem(index, "price", Number(e.target.value))}
+                            placeholder="Price"
+                          />
+                        </div>
+                        <div className="text-right text-sm font-medium">
+                          Amount: ${(item.quantity * item.price).toFixed(2)}
+                        </div>
+                      </div>
+                    ))}
+                    <Button onClick={addLineItem} variant="outline" className="w-full bg-transparent">
+                      <Plus className="mr-2 h-4 w-4" />
+                      Add Line Item
+                    </Button>
+                  </CardContent>
+                </Card>
 
-              {/* Notes */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Notes (Optional)</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Textarea
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    placeholder="Payment terms, thank you message, etc."
-                    rows={4}
-                  />
-                </CardContent>
-              </Card>
+                {/* Totals */}
+                <Card className="border-border/50 bg-card/80 backdrop-blur-sm shadow-lg shadow-black/5">
+                  <CardHeader>
+                    <CardTitle>Invoice Total</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Subtotal:</span>
+                      <span className="font-medium">${subtotal.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Tax ({taxRate}%):</span>
+                      <span className="font-medium">${tax.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between border-t border-border pt-2 text-lg font-bold">
+                      <span>Total:</span>
+                      <span className="text-primary">${total.toFixed(2)}</span>
+                    </div>
+                  </CardContent>
+                </Card>
 
-              {/* Generate Button */}
-              <Button onClick={generatePDF} size="lg" className="w-full">
-                <Download className="mr-2 h-5 w-5" />
-                Download Invoice PDF
-              </Button>
+                {/* Notes */}
+                <Card className="border-border/50 bg-card/80 backdrop-blur-sm shadow-lg shadow-black/5">
+                  <CardHeader>
+                    <CardTitle>Notes (Optional)</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Textarea
+                      value={notes}
+                      onChange={(e) => setNotes(e.target.value)}
+                      placeholder="Payment terms, thank you message, etc."
+                      rows={4}
+                    />
+                  </CardContent>
+                </Card>
+
+                {/* Generate Button */}
+                <Button onClick={generatePDF} size="lg" className="w-full bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-lg transition-all hover:scale-[1.01] group">
+                  <Download className="mr-2 h-5 w-5" />
+                  Download Invoice PDF
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
       <Footer />
     </div>
   )

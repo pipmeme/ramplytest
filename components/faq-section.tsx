@@ -1,4 +1,7 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { ArrowRight, MessageCircleQuestion } from "lucide-react"
 
 export function FAQSection() {
   const faqs = [
@@ -35,24 +38,59 @@ export function FAQSection() {
   ]
 
   return (
-    <section className="py-16 md:py-24">
-      <div className="container mx-auto px-4">
-        <div className="mb-12 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
-          <h2 className="mb-4 text-3xl font-bold text-foreground md:text-4xl">Frequently Asked Questions</h2>
-          <p className="mx-auto max-w-2xl text-muted-foreground md:text-lg">
-            Everything you need to know about working with Ramply Work
-          </p>
-        </div>
+    <section className="relative py-16 md:py-24 overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-secondary/10 to-background" />
+      </div>
 
-        <div className="mx-auto max-w-3xl animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
-          <Accordion type="single" collapsible className="w-full">
-            {faqs.map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">{faq.answer}</AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="grid lg:grid-cols-[1fr_2fr] gap-10 lg:gap-16 items-start">
+          {/* Left side - section info */}
+          <div className="lg:sticky lg:top-28 animate-in fade-in slide-in-from-left duration-700">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium mb-4">
+              <MessageCircleQuestion className="h-3.5 w-3.5" />
+              FAQ
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Frequently Asked{" "}
+              <span className="text-primary">Questions</span>
+            </h2>
+            <p className="text-muted-foreground text-base leading-relaxed mb-6">
+              Everything you need to know about working with Ramply Work. Can&apos;t find what you&apos;re looking for?
+            </p>
+            <Link href="/contact">
+              <Button variant="outline" className="group border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground transition-all">
+                Get in Touch
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+              </Button>
+            </Link>
+          </div>
+
+          {/* Right side - accordion */}
+          <div className="animate-in fade-in slide-in-from-right duration-700 delay-200">
+            <Accordion type="single" collapsible className="w-full space-y-3">
+              {faqs.map((faq, index) => (
+                <AccordionItem
+                  key={index}
+                  value={`item-${index}`}
+                  className="bg-card/60 backdrop-blur-sm border border-border/50 rounded-xl px-5 data-[state=open]:border-primary/20 data-[state=open]:shadow-lg data-[state=open]:shadow-black/5 transition-all duration-200"
+                >
+                  <AccordionTrigger className="text-left text-[15px] font-medium hover:text-primary transition-colors py-5 hover:no-underline">
+                    <span className="flex items-center gap-3">
+                      <span className="flex-shrink-0 w-7 h-7 rounded-lg bg-primary/10 text-primary text-xs font-semibold flex items-center justify-center">
+                        {index + 1}
+                      </span>
+                      {faq.question}
+                    </span>
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground leading-relaxed pb-5 pl-10">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
         </div>
       </div>
     </section>

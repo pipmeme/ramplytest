@@ -1,60 +1,173 @@
+"use client"
+
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { ArrowRight, Zap, BarChart3, TrendingUp } from "lucide-react"
+import { motion } from "framer-motion"
+
 export function HeroSection() {
   return (
-    <section className="container mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20 lg:py-24">
-      <div className="grid items-center gap-8 sm:gap-10 md:gap-12 lg:grid-cols-2">
-        <div className="space-y-4 sm:space-y-5 md:space-y-6 animate-in fade-in slide-in-from-left-8 duration-700">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground text-balance">
-            SYSTEMS FOR SCALABILITY.
-            <br />
-            WORK SMARTER.
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl text-muted-foreground text-pretty leading-relaxed">
-            We set up workflows and dashboards to accelerate your business growth
-          </p>
-        </div>
+    <section className="relative overflow-hidden">
+      {/* Subtle background glow — very faint to keep the page feeling clean */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.03] via-background to-primary/[0.05] pointer-events-none" />
+      <div className="absolute -top-32 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/2 right-0 md:right-32 w-[600px] h-[600px] bg-primary/[0.07] rounded-full blur-[120px] pointer-events-none transform -translate-y-1/2" />
 
-        <div className="relative flex items-center justify-center animate-in fade-in slide-in-from-right-8 duration-700 delay-200">
-          <svg
-            viewBox="0 0 400 300"
-            className="h-auto w-full max-w-xs sm:max-w-sm md:max-w-md"
-            xmlns="http://www.w3.org/2000/svg"
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 relative z-10">
+        <div className="grid items-center gap-10 lg:gap-16 xl:gap-20 lg:grid-cols-2">
+          {/* Left content */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="space-y-6 max-w-xl"
           >
-            {/* Background decorative elements */}
-            <circle cx="80" cy="50" r="8" fill="#D1F0E8" opacity="0.5" />
-            <circle cx="320" cy="80" r="6" fill="#D1F0E8" opacity="0.5" />
-            <circle cx="350" cy="200" r="10" fill="#D1F0E8" opacity="0.5" />
-            <path d="M 100 60 Q 120 50 140 55" stroke="#A8E6CF" strokeWidth="2" fill="none" opacity="0.6" />
-            <path d="M 330 100 L 340 110 L 350 100" stroke="#A8E6CF" strokeWidth="2" fill="none" opacity="0.6" />
+            {/* Badge - Higher contrast green */}
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/15 border border-primary/30 text-primary font-semibold shadow-sm">
+              <Zap className="h-4 w-4" />
+              Empowering Small Businesses
+            </div>
 
-            {/* Coins stack */}
-            <ellipse cx="100" cy="240" rx="35" ry="8" fill="#5DBEA3" />
-            <ellipse cx="100" cy="235" rx="35" ry="8" fill="#6ECDB3" />
-            <ellipse cx="100" cy="230" rx="35" ry="8" fill="#7FD9BE" />
-            <rect x="65" y="230" width="70" height="10" fill="#6ECDB3" />
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.08] tracking-tight text-foreground">
+              Systems for{" "}
+              <span className="relative inline-block mt-2">
+                {/* Darker, richer green gradient for the keyword */}
+                <span className="relative z-10 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent drop-shadow-sm">Scalability.</span>
+                <span className="absolute bottom-2 left-0 right-0 h-4 bg-primary/15 rounded-sm -z-0" />
+              </span>
+              <br />
+              <span className="text-muted-foreground/80 mt-2 block">Work Smarter.</span>
+            </h1>
 
-            {/* Bar chart */}
-            <rect x="180" y="200" width="35" height="60" rx="4" fill="#A8E6CF" />
-            <rect x="225" y="170" width="35" height="90" rx="4" fill="#7FD9BE" />
-            <rect x="270" y="140" width="35" height="120" rx="4" fill="#6ECDB3" />
-            <rect x="315" y="100" width="35" height="160" rx="4" fill="#5DBEA3" />
+            <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-lg">
+              We set up workflows, dashboards, and automation systems to{" "}
+              <span className="text-foreground font-semibold">accelerate your business growth</span> — so you can focus on what matters most.
+            </p>
 
-            {/* Line chart overlay */}
-            <path d="M 160 220 Q 200 200 240 180 Q 280 150 320 100" stroke="#4CAF93" strokeWidth="3" fill="none" />
-            <circle cx="160" cy="220" r="5" fill="#4CAF93" />
-            <circle cx="240" cy="180" r="5" fill="#4CAF93" />
-            <circle cx="320" cy="100" r="5" fill="#4CAF93" />
+            {/* CTA Buttons — Increased size and shadow for punchiness */}
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+              <Link href="/health-score">
+                <Button
+                  size="lg"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8 py-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group w-full sm:w-auto rounded-xl"
+                >
+                  Free Health Score
+                  <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+              <Link href="/services">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="text-base px-8 py-6 border-border hover:border-primary/50 hover:bg-primary/5 transition-all w-full sm:w-auto rounded-xl bg-white/50 backdrop-blur-sm"
+                >
+                  Explore Services
+                </Button>
+              </Link>
+            </div>
 
-            {/* Upward arrow */}
-            <path d="M 340 80 L 380 40 L 390 50 L 350 90 Z" fill="#5DBEA3" opacity="0.8" />
-            <path d="M 380 40 L 390 50 L 390 30 Z" fill="#5DBEA3" opacity="0.8" />
-            <path d="M 380 40 L 370 40 L 390 50 Z" fill="#5DBEA3" opacity="0.8" />
+            {/* Trust indicators */}
+            <div className="flex flex-wrap items-center gap-6 pt-4 text-sm text-muted-foreground font-medium">
+              <div className="flex items-center gap-2.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_8px_rgba(0,0,0,0.1)] animate-pulse" />
+                <span>Fast Setup</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-primary/80 shadow-[0_0_8px_rgba(0,0,0,0.1)] animate-pulse" style={{ animationDelay: "0.5s" }} />
+                <span>No Lock-In</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-primary/60 shadow-[0_0_8px_rgba(0,0,0,0.1)] animate-pulse" style={{ animationDelay: "1s" }} />
+                <span>Measurable ROI</span>
+              </div>
+            </div>
+          </motion.div>
 
-            {/* Mobile/device icon */}
-            <rect x="120" y="120" width="60" height="90" rx="6" fill="white" stroke="#E0E0E0" strokeWidth="2" />
-            <rect x="130" y="130" width="40" height="50" rx="2" fill="#F0F0F0" />
-            <line x1="135" y1="190" x2="165" y2="190" stroke="#E0E0E0" strokeWidth="2" />
-            <circle cx="150" cy="200" r="4" fill="#E0E0E0" />
-          </svg>
+          {/* Right visual — Deeper shadows and richer greens */}
+          <motion.div
+            initial={{ opacity: 0, x: 30, y: 20 }}
+            animate={{ opacity: 1, x: 0, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+            className="relative flex items-center justify-center lg:justify-end mt-12 lg:mt-0"
+          >
+            <div className="relative w-full max-w-lg">
+              {/* Decorative background element behind the card */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent rounded-3xl transform rotate-3 scale-105 shadow-2xl" />
+
+              {/* Main card */}
+              <div className="relative bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl shadow-black/[0.06] p-8 sm:p-10 border border-border">
+                <div className="space-y-8">
+                  {/* Mini bar chart */}
+                  <div className="flex items-end gap-2 h-40 sm:h-48">
+                    {[40, 55, 45, 70, 60, 85, 75, 95].map((height, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ height: 0 }}
+                        animate={{ height: `${height}%` }}
+                        transition={{ duration: 0.7, delay: 0.4 + i * 0.06, ease: [0.16, 1, 0.3, 1] }}
+                        className="flex-1 rounded-t-md"
+                        style={{
+                          backgroundColor: i === 7 ? 'var(--primary)' : `color-mix(in srgb, var(--primary) ${40 + i * 8}%, transparent)`,
+                        }}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Divider */}
+                  <div className="h-px bg-primary/10" />
+
+                  {/* Stats row — Stronger green containers */}
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="bg-primary/5 hover:bg-primary/10 transition-colors rounded-xl p-4 text-center border border-primary/10">
+                      <p className="text-xs font-medium text-muted-foreground mb-1">Efficiency</p>
+                      <p className="text-xl font-bold text-primary">+40%</p>
+                    </div>
+                    <div className="bg-primary/5 hover:bg-primary/10 transition-colors rounded-xl p-4 text-center border border-primary/10">
+                      <p className="text-xs font-medium text-muted-foreground mb-1">Time Saved</p>
+                      <p className="text-xl font-bold text-primary">15h</p>
+                    </div>
+                    <div className="bg-primary/5 hover:bg-primary/10 transition-colors rounded-xl p-4 text-center border border-primary/10">
+                      <p className="text-xs font-medium text-muted-foreground mb-1">Growth</p>
+                      <p className="text-xl font-bold text-primary">2.5×</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating badges - Increased shadow to pop off the page */}
+              <motion.div
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute -top-6 -right-6 bg-white rounded-xl shadow-xl shadow-black/[0.08] p-4 border border-border z-20"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                    <TrendingUp className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold tracking-wide text-foreground uppercase">Revenue</p>
+                    <p className="text-sm text-primary font-black mt-0.5">+32%</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                animate={{ y: [0, 8, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute -bottom-6 -left-6 bg-white rounded-xl shadow-xl shadow-black/[0.08] p-4 border border-border z-20"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                    <BarChart3 className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold tracking-wide text-foreground uppercase">Automated</p>
+                    <p className="text-sm text-primary font-black mt-0.5">128 tasks</p>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>
